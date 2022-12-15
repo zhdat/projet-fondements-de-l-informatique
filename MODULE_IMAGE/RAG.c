@@ -58,7 +58,26 @@ static void init_father_priv(rag r){
 }
 
 static void init_neighbors_priv(rag r,int n,int m){
-	
+	int i;
+	for (i = 0; i < r->nb_blocks; i++) {
+		r->neighbors[i] = NULL;
+	}
+	for (i = 0; i < r->nb_blocks; i++) {
+		if (i % n != 0) {
+			add_neighbor_priv(r, i, i - 1);
+		}
+		if (i % n != n - 1) {
+			add_neighbor_priv(r, i, i + 1);
+		}
+		if (i >= n) {
+			add_neighbor_priv(r, i, i - n);
+		}
+		if (i < r->nb_blocks - n) {
+			add_neighbor_priv(r, i, i + n);
+		}
+	}
 }
 
-static void init_partition_error_priv(rag r);
+static void init_partition_error_priv(rag r){
+
+}
