@@ -28,7 +28,7 @@ int main(int argc,char* argv[])
     }
   while(image_pixel_suivant(degrade));/* On passe à la ligne suivante*/
 
-  /* ecriture d'une ligne horizontale bleu au milieu de l'image*/
+  /* écriture d'une ligne horizontale bleu au milieu de l'image*/
  COORDX(milieu)=0;
  COORDY(milieu)=255;
  image_move_to(degrade,&milieu);
@@ -39,11 +39,11 @@ do
 }
 while(image_pixel_droite(degrade));
 
-/* ecriture d'une diagonale verte. */
+/* écriture d'une diagonale verte. */
  for(i=0;i<512;i++)
    image_write_pixel(degrade,i,i,vert);
  
-/* calcul de la couleur moyenne  par un parcour de l'image*/
+/* calcul de la couleur moyenne  par un parcours de l'image*/
   nb_pix=0;
   image_debut(degrade);
   do
