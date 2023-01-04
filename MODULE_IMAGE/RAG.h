@@ -15,3 +15,7 @@ static void init_partition_error_priv(rag r);
 extern double RAG_give_closest_region(rag r, int * i, int * j);
 
 void RAG_merge_regions(rag r, int i, int j);
+
+extern void RAG_normalize_parents(rag r);
+
+extern void RAG_give_mean_color(rag r, int indice_block, int *average_color);
