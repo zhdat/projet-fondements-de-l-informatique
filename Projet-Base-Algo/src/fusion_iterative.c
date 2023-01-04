@@ -10,8 +10,8 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     double erreur_init;
     double erreur_seuil;
     double erreur_after_merge;
-    int *i;
-    int *j;
+    int *i = NULL;
+    int *j = NULL;
 
     erreur_init = r->erreur_partition;
     erreur_seuil = erreur_init * seuil/100;
@@ -19,11 +19,11 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     *i = 0;
     *j = 0;
 
-    erreur_after_merge = RAG_give_closest_region(r, *i, *j);
+    erreur_after_merge = RAG_give_closest_region(r, i, j);
     while (erreur_after_merge < erreur_seuil)
     {
         RAG_merge_regions(r, *i, *j);
-        erreur_after_merge = RAG_give_closest_region(r, *i, *j);
+        erreur_after_merge = RAG_give_closest_region(r, i, j);
     }
 }
 
