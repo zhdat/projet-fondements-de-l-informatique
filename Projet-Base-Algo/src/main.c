@@ -1,18 +1,30 @@
 /*
  * ENSICAEN
- * 6 Boulevard Marechal Juin
+ * 6 Boulevard Maréchal Juin
  * F-14050 Caen Cedex
  *
  * This file is owned by ENSICAEN students.
- * No portion of this document may be reproduced, copied
- * or revised without written permission of the authors.
- */
 
-/* Récupère le nom d'un image, le nombre de block en ligne et en colonne ainsi qu'un seuil dans argv[1], argv[2], argv[3] et argv[4]. 
-Ce programme :
-    - Crée un RAG à partir de l’image (qui aura été chargé à partir de son nom) et des nombres de blocks par lignes et colonnes.
-    - Appelle la fonction perform merge, avec une valeur de seuil lue en paramètre. 
-    - Récupère l’image résultat avec create output image et l’enregistre dans un fichier (on pourra plus simplement l’envoyer sur le flot de sortie stdout).
+-   * No portion of this document may be reproduced, copied
+    
+-   * or revised without written permission of the authors. */
+    
+
+/**
+
+-   * @author Calliste RAVIX <calliste.ravix@ecole.ensicaen.fr>
+    
+-   * @author Maxime MICHEL <maxime.michel@ecole.ensicaen.fr> * @version 0.1.0 - 2023-01-05  
+    *
+    
+
+* @todo the list of improvements suggested * @bug the list of known bugs.  
+*/
+
+/**  
+* @file main.c  
+*  
+* Description of the program objectives. * All necessary references.  
 */
 
 #include <string.h>
@@ -23,6 +35,12 @@ Ce programme :
 #include "image.h"
 #include "fusion_iterative.h"
 
+
+/**  
+* A complete description of the function.  
+*  
+* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+*/
 int main(int argc, char *argv[]) {
    #define USAGE "Usage : %s text_file\n"
 

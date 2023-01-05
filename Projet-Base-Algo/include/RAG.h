@@ -1,3 +1,13 @@
+/*
+ * ENSICAEN
+ * 6 Boulevard Marechal Juin
+ * F-14050 Caen Cedex
+ *
+ * This file is owned by ENSICAEN students.
+ * No portion of this document may be reproduced, copied
+ * or revised without written permission of the authors.
+ */ 
+
 #ifndef RAG_H
 #define RAG_H
 #include "image.h"
@@ -28,29 +38,136 @@ struct RAG {
 
 typedef struct RAG * rag;
 
+
+/**  
+* Cette fonction remplit la structure RAG.  
+*  
+* @param img image. 
+* @param n nombre de blocks par ligne.
+* @param m nombre de blocks par colonne.
+* 
+* @return renvoie la structure RAG.  
+*   
+*/
 extern rag create_RAG(image img, int n, int m);
 
+
+/**  
+* Permet de désallouer la structure RAG.  
+*  
+* @param r structure RAG. 
+*   
+*/
 extern void free_RAG(rag r);
 
+
+/**  
+* Permet d'initialiser les moments de la structure RAG.  
+*  
+* @param r structure RAG.
+* @param n nombre de blocks par ligne.
+* @param m nombre de blocks par colonne.
+*   
+*/
 static void init_moments_priv(rag r,int n,int m);
 
+
+/**  
+* Permet de désallouer les moments de la structure RAG.  
+*  
+* @param r structure RAG. 
+*   
+*/
 static void free_moments_priv(rag r);
 
+
+/**  
+* Permet d'initialiser les parents des cellules.  
+*  
+* @param r structure RAG.
+* 
+*/
 static void init_father_priv(rag r);
 
+
+/**  
+* Permet de désallouer les parents des cellules.  
+*  
+* @param r structure RAG. 
+*   
+*/
 static void free_father_priv(rag r);
 
+
+/**  
+* Permet d'initialiser les voisins des cellules.  
+*  
+* @param r structure RAG.
+* @param n nombre de blocks par ligne.
+* @param m nombre de blocks par colonne.
+* 
+*/
 static void init_neighbors_priv(rag r,int n,int m);
 
+
+/**  
+* Permet de désallouer les voisins des cellules.  
+*  
+* @param r structure RAG. 
+*   
+*/
 static void free_neighbors_priv(rag r);
 
+
+/**  
+* Permet d'initialiser l'erreur de partitions.  
+*  
+* @param r structure RAG.
+* 
+*/
 static void init_partition_error_priv(rag r);
 
+
+/**  
+* Cherche deux indices de blocks induisant la plus petite augmentation d'erreur quadratique.  
+*  
+* @param r structure RAG.
+* @param i indice de block.
+* @param j indice de block.
+* 
+* @return Renvoie l'augmentation de l'erreur quadratique.
+* 
+*/
 extern double RAG_give_closest_region(rag r, int * i, int * j);
 
+
+/**  
+* Fusionne les deux régions passées en paramètres en effectuant : - Mise à jour du tableau father ; - Mise à jour des moments ; - Mise à jour des listes des deux régions fusionnées ; - Mise à jour de l'erreur de partition.  
+*  
+* @param r structure RAG.
+* @param i indice de block.
+* @param j indice de block.
+* 
+*/
 void RAG_merge_regions(rag r, int i, int j);
 
+
+/**  
+* Effectue un parcours rétrograde du tableau father en remplaçant pour chaque indice i, father[i] par father[father[i]].  
+*  
+* @param r structure RAG.
+* 
+*/
 extern void RAG_normalize_parents(rag r);
 
+
+/**  
+* Calcule la couleur moyenne d'un block.  
+*  
+* @param r structure RAG.
+* @param indice_block indice de block.
+* @param average_color .
+* 
+*/
 extern void RAG_give_mean_color(rag r, int indice_block, int *average_color);
 #endif
