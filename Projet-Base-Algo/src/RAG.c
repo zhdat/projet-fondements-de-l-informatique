@@ -83,14 +83,9 @@ static void free_neighbors_priv(rag r){
 
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;
-	r->erreur_partition = (long double)malloc(r->nb_blocks * sizeof(double));
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
 	}
-}
-
-static void free_partition_error_priv(rag r){
-	free(r->erreur_partition);
 }
 
 extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une image et de la taille des blocks. */
