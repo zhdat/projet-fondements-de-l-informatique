@@ -187,7 +187,7 @@ extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double*
         M2[1] = G2;
         M2[2] = B2;
 
-    } else{
+    } else{ /* @TODO Gris */
         while (tmp < nbr_pixel)
         {
             for (i = 0; i < nbr_ligne; i++){

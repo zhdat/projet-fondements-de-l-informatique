@@ -176,13 +176,10 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	erreur_min = -1;
 	i_min = 0;
 	j_min = 0;
-	j = 0;
 	for (i = 0; i < r->nb_blocks; i++) { /* @TODO (voisins) */
 		if (r->father[i] == i) {
-			*indice1_block = i;
-			for (j = i; j < r->nb_blocks; j++) {
+			for (j = i + 1; j < r->nb_blocks; j++) {
 				if (r->father[j] == j) {
-					*indice2_block = j;
 
 					/* mu_B = (r->m[*indice1_block].M1[0] + r->m[*indice1_block].M1[1] + r->m[*indice1_block].M1[2]) / 3 * r->m[*indice1_block].M0; */
 					/* mu_Bp = (r->m[*indice2_block].M1[0] + r->m[*indice2_block].M1[1] + r->m[*indice2_block].M1[2]) / 3 * r->m[*indice2_block].M0; */
@@ -237,7 +234,6 @@ static void update_moments_priv(rag r, int region1, int region2){ /* Met à jour
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
 static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jour les listes de voisins des deux régions fusionnées. */
-	cellule c = r->neighbors[region1];
 	for (c = r->neighbors[region1]; c != NULL; c = c->next) {
 		if (c->block != region2) {
 			cellule c2 = malloc(sizeof(struct cellule));
@@ -255,9 +251,11 @@ static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jo
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
 void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régions en mettant à jour : le tableau father, les moments, les voisins et l'erreur de partition. */
-	int i;
-	double mu_B;
-	double mu_Bp;
+	double mu_B[3];
+	double mu_Bp[3];
+	double diff_mu[3];
+	double norme_2;
+
 
 	/* Mise à jour du tableau father */
 	r->father[region1] = region2;
@@ -269,9 +267,20 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 	update_neighbors_priv(r, region1, region2);
 
 	/* Mise à jour de l'erreur de partition */
-	mu_B = (r->m[region1].M1[0] + r->m[region1].M1[1] + r->m[region1].M1[2]) / r->m[region1].M0;
-	mu_Bp = (r->m[region2].M1[0] + r->m[region2].M1[1] + r->m[region2].M1[2]) / r->m[region2].M0;
-	r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * ((mu_B - mu_Bp) * (mu_B - mu_Bp));
+	mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
+	mu_B[1] = r->m[region1].M1[1] / r->m[region1].M0;
+	mu_B[2] = r->m[region1].M1[2] / r->m[region1].M0;
+	mu_Bp[0] = r->m[region2].M1[0] / r->m[region2].M0;
+	mu_Bp[1] = r->m[region2].M1[1] / r->m[region2].M0;
+	mu_Bp[2] = r->m[region2].M1[2] / r->m[region2].M0;
+
+	diff_mu[0] = mu_B[0] - mu_Bp[0];
+	diff_mu[1] = mu_B[1] - mu_Bp[1];
+	diff_mu[2] = mu_B[2] - mu_Bp[2];
+
+	norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
+
+	erreur = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * norme_2;
 }
 
 /**  
