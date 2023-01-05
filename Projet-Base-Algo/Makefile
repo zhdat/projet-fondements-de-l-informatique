@@ -3,7 +3,7 @@ RM       = rm
 DOC      = doxygen
 CPPFLAGS = -I./include
 CFLAGS   = -Wall -Wextra -ansi -pedantic -g
-LDFLAGS  = -L ./lib -limage64# Add the libraries you will use, e.g. -lm
+LDFLAGS  = -L ./lib -limage64 # Add the libraries you will use, e.g. -lm
 
 .PHONY: all doc clean distclean
 
