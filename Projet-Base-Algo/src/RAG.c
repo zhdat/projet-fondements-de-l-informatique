@@ -4,8 +4,6 @@
 #include "moment.h"
 #include "image.h"
 
-/* @TODO : Free les Init !!!!! */
-
 
 static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des blocks à l'aide de give_moments() */
 	int i;
