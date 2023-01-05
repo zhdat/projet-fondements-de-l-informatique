@@ -45,8 +45,12 @@ extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double*
     nbr_pixel = nbr_colonne * nbr_ligne;
     tmp = 0;
     *M0 = 0;
-    *M1 = 0;
-    *M2 = 0;
+    M1[0] = 0;
+    M1[1] = 0;
+    M1[2] = 0;
+    M2[0] = 0;
+    M2[1] = 0;
+    M2[2] = 0;
 
     COORDX(p) = pixel_start_x;
     COORDY(p) = pixel_start_y;
@@ -85,6 +89,13 @@ extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double*
                 image_pixel_dessous(img);
             }
         }
+        M1[0] = R;
+        M1[1] = G;
+        M1[2] = B;
+        M2[0] = R2;
+        M2[1] = G2;
+        M2[2] = B2;
+
     } else{
         while (tmp < nbr_pixel)
         {
@@ -110,11 +121,8 @@ extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double*
                 image_pixel_dessous(img);
             }
         }
+        M1[0] = GR;
+        M2[0] = GR2;
     }
-    M1[1] = R;
-    M1[2] = G;
-    M1[3] = B;
-    M2[1] = R2;
-    M2[2] = G2;
-    M2[3] = B2;
+
 }
