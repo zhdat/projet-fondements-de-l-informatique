@@ -21,19 +21,9 @@
 */
 static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des blocks à l'aide de give_moments() */
 	int i;
-	int M0;
-	double M1[3];
-	double M2[3];
 	r->m = malloc(r->nb_blocks * sizeof(struct moments));
 	for (i = 0; i < r->nb_blocks; i++) {
-		give_moments(r->img, i, n, m, &M0, M1, M2);
-		r->m[i].M0 = M0;
-		r->m[i].M1[0] = M1[0];
-		r->m[i].M1[1] = M1[1];
-		r->m[i].M1[2] = M1[2];
-		r->m[i].M2[0] = M2[0];
-		r->m[i].M2[1] = M2[1];
-		r->m[i].M2[2] = M2[2];
+		give_moments(r->img, i, n, m, &(r->m[i].M0), r->m[i].M1, r->m[i].M2);
 	}
 }
 
@@ -129,8 +119,9 @@ static void init_partition_error_priv(rag r){ /* initialise l'erreur de partitio
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
+    printf("erreur partition : %Lf\n", r->erreur_partition);
 	}
-	printf("erreur partition : %Lf", r->erreur_partition);
+	printf("erreur partition : %Lf\n", r->erreur_partition);
 }
 
 
@@ -145,7 +136,7 @@ extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une 
 	r->nb_blocks = n * m;
 	r->erreur_partition = 0;
 
-	printf("TEST");
+	printf("TEST\n");
 
 	init_father_priv(r);
 	init_neighbors_priv(r, n, m);

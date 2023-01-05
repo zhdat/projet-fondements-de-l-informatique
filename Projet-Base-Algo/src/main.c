@@ -61,7 +61,9 @@ int main(int argc, char *argv[]) {
       printf("Erreur : nombre d'arguments incorrect.\n");
       return 1;
    }
+   printf("TEST\n");
    img = FAIRE_image();
+   printf("TEST\n");
    image_charger(img, argv[1]);
    n = atoi(argv[2]);
    m = atoi(argv[3]);
