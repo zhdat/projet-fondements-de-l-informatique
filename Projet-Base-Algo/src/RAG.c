@@ -145,6 +145,8 @@ extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une 
 	r->nb_blocks = n * m;
 	r->erreur_partition = 0;
 
+	printf("TEST");
+
 	init_father_priv(r);
 	init_neighbors_priv(r, n, m);
 
