@@ -83,7 +83,7 @@ static void free_neighbors_priv(rag r){
 
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;
-	r->erreur_partition = malloc(r->nb_blocks * sizeof(double));
+	r->erreur_partition = (long double)malloc(r->nb_blocks * sizeof(double));
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
 	}
@@ -175,6 +175,8 @@ static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jo
 
 void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régions en mettant à jour : le tableau father, les moments, les voisins et l'erreur de partition. */
 	int i;
+	int mu_B;
+	int mu_Bp;
 
 	/* Mise à jour du tableau father */
 	r->father[region1] = region2;
