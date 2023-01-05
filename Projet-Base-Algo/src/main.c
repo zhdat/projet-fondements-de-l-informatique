@@ -52,5 +52,6 @@ int main(int argc, char *argv[]) {
    perform_merge(r, seuil);
    img_out = create_output_image(r);
    image_sauvegarder(img_out, "output.ppm");
+   free_RAG(r);
    return EXIT_SUCCESS;
 }

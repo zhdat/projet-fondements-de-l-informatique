@@ -25,12 +25,20 @@ static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des 
 	}
 }
 
+static void free_moments_priv(rag r){
+	free(r->m);
+}
+
 static void init_father_priv(rag r){ /* Initialise le père de chaque block à lui même. */
 	int i;
 	r->father = malloc(r->nb_blocks * sizeof(int));
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->father[i] = i;
 	}
+}
+
+static void free_father_priv(rag r){
+	free(r->father);
 }
 
 static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes de voisins de chaque blocks */
@@ -60,11 +68,29 @@ static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes d
 	}
 }
 
+static void free_neighbors_priv(rag r){
+	int i;
+	for (i = 0; i < r->nb_blocks; i++) {
+		cellule c = r->neighbors[i];
+		while (c != NULL) {
+			cellule tmp = c;
+			c = c->next;
+			free(tmp);
+		}
+	}
+	free(r->neighbors);
+}
+
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;
+	r->erreur_partition = malloc(r->nb_blocks * sizeof(double));
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
 	}
+}
+
+static void free_partition_error_priv(rag r){
+	free(r->erreur_partition);
 }
 
 extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une image et de la taille des blocks. */
@@ -79,6 +105,14 @@ extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une 
 	init_moments_priv(r, n, m);
 	init_partition_error_priv(r);
 	return r;
+}
+
+extern rag free_RAG(rag r){
+	free_father_priv(r);
+	free_neighbors_priv(r);
+	free_moments_priv(r);
+	free_partition_error_priv(r);
+	free(r);
 }
 
 extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_block){ /* renvoie les deux indices de blocks dont la fusion induit la plus petite augmentation d'erreur quadratique. Seuls les blocks vérifiant father[i]==i seront pris en compte dans le calcul. Cette fonction renvoie la valeur de cette augmentation. */
@@ -98,7 +132,9 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 			for (j = i; j < r->nb_blocks; j++) {
 				if (r->father[j] == j) {
 					*indice2_block = j;
-					erreur = ((r->m[*indice1_block].M0 * r->m[*indice2_block].M0) / (r->m[*indice1_block].M0 + r->m[*indice2_block].M0)); /* @TODO */
+					mu_B = (r->m[*indice1_block].M1[0] + r->m[*indice1_block].M1[1] + r->m[*indice1_block].M1[2]) / r->m[*indice1_block].M0;
+					mu_Bp = (r->m[*indice2_block].M1[0] + r->m[*indice2_block].M1[1] + r->m[*indice2_block].M1[2]) / r->m[*indice2_block].M0;
+					erreur = ((r->m[*indice1_block].M0 * r->m[*indice2_block].M0) / (r->m[*indice1_block].M0 + r->m[*indice2_block].M0)) * ((mu_B - mu_Bp) * (mu_B - mu_Bp)); 
 				}
 				if (erreur < erreur_min) {
 					erreur_min = erreur;
@@ -150,7 +186,9 @@ void RAG_merge_region(rag r, int region1, int region2){ /* Fusionne les 2 régio
 	update_neighbors_priv(r, region1, region2);
 
 	/* Mise à jour de l'erreur de partition */
-	r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)); /* @TODO */
+	mu_B = (r->m[region1].M1[0] + r->m[region1].M1[1] + r->m[region1].M1[2]) / r->m[region1].M0;
+	mu_Bp = (r->m[region2].M1[0] + r->m[region2].M1[1] + r->m[region2].M1[2]) / r->m[region2].M0;
+	r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * ((mu_B - mu_Bp) * (mu_B - mu_Bp));
 }
 
 extern void RAG_normalize_parents(rag r){ /* effectue un parcours rétrograde du tableau father en remplçant pour chaque indice i, father[i] par father[father[i]]. */
