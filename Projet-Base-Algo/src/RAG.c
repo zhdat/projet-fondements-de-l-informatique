@@ -64,10 +64,10 @@ static void free_father_priv(rag r){
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
 static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes de voisins de chaque blocks */
-	r->neighbors = malloc(r->nb_blocks * sizeof(struct cellule));
 	int i;
 	int j;
 	int k;
+	r->neighbors = malloc(r->nb_blocks * sizeof(struct cellule));
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->neighbors[i] = NULL;
 	}
