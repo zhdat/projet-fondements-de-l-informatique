@@ -106,7 +106,6 @@ extern rag free_RAG(rag r){
 	free_father_priv(r);
 	free_neighbors_priv(r);
 	free_moments_priv(r);
-	free_partition_error_priv(r);
 	free(r);
 }
 
