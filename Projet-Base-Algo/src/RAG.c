@@ -122,6 +122,8 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	int j_min;
 	double erreur_min;
 	double erreur;
+	double mu_B;
+	double mu_Bp;
 	erreur = 0;
 	erreur_min = -1;
 	i_min = 0;
@@ -175,8 +177,8 @@ static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jo
 
 void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régions en mettant à jour : le tableau father, les moments, les voisins et l'erreur de partition. */
 	int i;
-	int mu_B;
-	int mu_Bp;
+	double mu_B;
+	double mu_Bp;
 
 	/* Mise à jour du tableau father */
 	r->father[region1] = region2;
