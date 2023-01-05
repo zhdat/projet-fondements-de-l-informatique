@@ -102,7 +102,7 @@ extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une 
 	return r;
 }
 
-extern rag free_RAG(rag r){
+extern void free_RAG(rag r){
 	free_father_priv(r);
 	free_neighbors_priv(r);
 	free_moments_priv(r);
