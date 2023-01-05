@@ -178,8 +178,10 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	int j_min;
 	double erreur_min;
 	double erreur;
-	double mu_B;
-	double mu_Bp;
+	double mu_B[3];
+	double mu_Bp[3];
+	double diff_mu[3];
+	double norme_2;
 	erreur = 0;
 	erreur_min = -1;
 	i_min = 0;
@@ -190,9 +192,24 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 			for (j = i; j < r->nb_blocks; j++) {
 				if (r->father[j] == j) {
 					*indice2_block = j;
-					mu_B = (r->m[*indice1_block].M1[0] + r->m[*indice1_block].M1[1] + r->m[*indice1_block].M1[2]) / r->m[*indice1_block].M0;
-					mu_Bp = (r->m[*indice2_block].M1[0] + r->m[*indice2_block].M1[1] + r->m[*indice2_block].M1[2]) / r->m[*indice2_block].M0;
-					erreur = ((r->m[*indice1_block].M0 * r->m[*indice2_block].M0) / (r->m[*indice1_block].M0 + r->m[*indice2_block].M0)) * ((mu_B - mu_Bp) * (mu_B - mu_Bp)); 
+
+					/* mu_B = (r->m[*indice1_block].M1[0] + r->m[*indice1_block].M1[1] + r->m[*indice1_block].M1[2]) / 3 * r->m[*indice1_block].M0; */
+					/* mu_Bp = (r->m[*indice2_block].M1[0] + r->m[*indice2_block].M1[1] + r->m[*indice2_block].M1[2]) / 3 * r->m[*indice2_block].M0; */
+					
+					mu_B[0] = r->m[*indice1_block].M1[0] / r->m[*indice1_block].M0;
+					mu_B[1] = r->m[*indice1_block].M1[1] / r->m[*indice1_block].M0;
+					mu_B[2] = r->m[*indice1_block].M1[2] / r->m[*indice1_block].M0;
+					mu_Bp[0] = r->m[*indice2_block].M1[0] / r->m[*indice2_block].M0;
+					mu_Bp[1] = r->m[*indice2_block].M1[1] / r->m[*indice2_block].M0;
+					mu_Bp[2] = r->m[*indice2_block].M1[2] / r->m[*indice2_block].M0;
+
+					diff_mu[0] = mu_B[0] - mu_Bp[0];
+					diff_mu[1] = mu_B[1] - mu_Bp[1];
+					diff_mu[2] = mu_B[2] - mu_Bp[2];
+
+					norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
+
+					erreur = ((r->m[*indice1_block].M0 * r->m[*indice2_block].M0) / (r->m[*indice1_block].M0 + r->m[*indice2_block].M0)) * norme_2; 
 				}
 				if (erreur < erreur_min) {
 					erreur_min = erreur;
