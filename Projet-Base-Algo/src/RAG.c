@@ -24,7 +24,7 @@ static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des 
 	int M0;
 	double M1[3];
 	double M2[3];
-	r->m = malloc(r->nb_blocks * sizeof(moments));
+	r->m = malloc(r->nb_blocks * sizeof(struct moments));
 	for (i = 0; i < r->nb_blocks; i++) {
 		give_moments(r->img, i, n, m, &M0, M1, M2);
 		r->m[i].M0 = M0;
@@ -74,7 +74,7 @@ static void free_father_priv(rag r){
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
 static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes de voisins de chaque blocks */
-	r->neighbors = malloc(r->nb_blocks * sizeof(cellule));
+	r->neighbors = malloc(r->nb_blocks * sizeof(struct cellule));
 	int i;
 	int j;
 	int k;
@@ -85,13 +85,13 @@ static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes d
 	for (j = 0; j < n; j++){
 		for (k = 0; k < m; k++){
 			if (j < n - 1) {
-				cellule c = malloc(sizeof(cellule));
+				cellule c = malloc(sizeof(struct cellule));
 				c->block = j * m + k;
 				c->next = r->neighbors[(j + 1) * m + k];
 				r->neighbors[(j + 1) * m + k] = c;
 			}
 			if (k < m - 1) {
-				cellule c = malloc(sizeof(cellule));
+				cellule c = malloc(sizeof(struct cellule));
 				c->block = j * m + k;
 				c->next = r->neighbors[j * m + k + 1];
 				r->neighbors[j * m + k + 1] = c;
@@ -232,7 +232,7 @@ static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jo
 	cellule c = r->neighbors[region1];
 	for (c = r->neighbors[region1]; c != NULL; c = c->next) {
 		if (c->block != region2) {
-			cellule c2 = malloc(sizeof(cellule));
+			cellule c2 = malloc(sizeof(struct cellule));
 			c2->block = c->block;
 			c2->next = r->neighbors[region2];
 			r->neighbors[region2] = c2;
