@@ -30,7 +30,7 @@ typedef struct RAG * rag;
 
 extern rag create_RAG(image img, int n, int m);
 
-extern rag free_RAG(rag r);
+extern void free_RAG(rag r);
 
 static void init_moments_priv(rag r,int n,int m);
 
