@@ -234,6 +234,7 @@ static void update_moments_priv(rag r, int region1, int region2){ /* Met à jour
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
 static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jour les listes de voisins des deux régions fusionnées. */
+	cellule c;
 	for (c = r->neighbors[region1]; c != NULL; c = c->next) {
 		if (c->block != region2) {
 			cellule c2 = malloc(sizeof(struct cellule));
