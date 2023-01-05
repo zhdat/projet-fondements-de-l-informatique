@@ -21,6 +21,7 @@ all: ./bin/prog
 # ./src/image.o: ./src/image.c
 #	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@ -c
 
+
 ./src/moment.o: ./src/moment.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@ -c
 
