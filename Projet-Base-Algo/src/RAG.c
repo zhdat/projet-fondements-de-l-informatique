@@ -173,7 +173,7 @@ static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jo
 }
 
 
-void RAG_merge_region(rag r, int region1, int region2){ /* Fusionne les 2 régions en mettant à jour : le tableau father, les moments, les voisins et l'erreur de partition. */
+void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régions en mettant à jour : le tableau father, les moments, les voisins et l'erreur de partition. */
 	int i;
 
 	/* Mise à jour du tableau father */
