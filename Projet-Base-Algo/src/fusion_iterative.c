@@ -48,4 +48,5 @@ image create_output_image(rag r){ /* crée une image où chaque block est affich
         }
     }
     return img_out;
+    
 }
