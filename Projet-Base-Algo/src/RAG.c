@@ -118,10 +118,8 @@ static void free_neighbors_priv(rag r){
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
-		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
-    printf("erreur partition : %Lf\n", r->erreur_partition);
+		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0); 
 	}
-	printf("erreur partition : %Lf\n", r->erreur_partition);
 }
 
 
@@ -135,8 +133,6 @@ extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une 
 	r->img = img;
 	r->nb_blocks = n * m;
 	r->erreur_partition = 0;
-
-	printf("TEST\n");
 
 	init_father_priv(r);
 	init_neighbors_priv(r, n, m);
