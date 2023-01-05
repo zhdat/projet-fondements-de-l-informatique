@@ -8,8 +8,8 @@
 
 extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double* M1, double* M2){
     
-    int nbr_ligne; // Ligne du block
-    int nbr_colonne; // Colonne du block
+    int nbr_ligne; /* Ligne du block */
+    int nbr_colonne; /* Colonne du block */
     int pixel_start_x;
     int pixel_start_y;
     Point p;
