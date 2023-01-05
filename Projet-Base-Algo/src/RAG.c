@@ -130,6 +130,7 @@ static void init_partition_error_priv(rag r){ /* initialise l'erreur de partitio
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
 	}
+	printf("erreur partition : %Lf", r->erreur_partition);
 }
 
 
@@ -186,6 +187,7 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	erreur_min = -1;
 	i_min = 0;
 	j_min = 0;
+	j = 0;
 	for (i = 0; i < r->nb_blocks; i++) { /* @TODO (voisins) */
 		if (r->father[i] == i) {
 			*indice1_block = i;
@@ -195,7 +197,7 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 
 					/* mu_B = (r->m[*indice1_block].M1[0] + r->m[*indice1_block].M1[1] + r->m[*indice1_block].M1[2]) / 3 * r->m[*indice1_block].M0; */
 					/* mu_Bp = (r->m[*indice2_block].M1[0] + r->m[*indice2_block].M1[1] + r->m[*indice2_block].M1[2]) / 3 * r->m[*indice2_block].M0; */
-					
+
 					mu_B[0] = r->m[*indice1_block].M1[0] / r->m[*indice1_block].M0;
 					mu_B[1] = r->m[*indice1_block].M1[1] / r->m[*indice1_block].M0;
 					mu_B[2] = r->m[*indice1_block].M1[2] / r->m[*indice1_block].M0;
@@ -288,6 +290,7 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 *  
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
+/* @TODO placer cette fonction*/
 extern void RAG_normalize_parents(rag r){ /* effectue un parcours rétrograde du tableau father en remplçant pour chaque indice i, father[i] par father[father[i]]. */
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
