@@ -9,7 +9,7 @@ LDFLAGS  = -L ./lib -limage64 # Add the libraries you will use, e.g. -lm
 
 all: ./bin/prog
 
-./bin/prog: ./src/main.o ./src/fusion_iterative.o ./src/image.o ./src/moment.o ./src/RAG.o # And others .o
+./bin/prog: ./src/main.o ./src/fusion_iterative.o ./src/moment.o ./src/RAG.o # And others .o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 ./src/main.o: ./src/main.c
@@ -18,8 +18,8 @@ all: ./bin/prog
 ./src/fusion_iterative.o: ./src/fusion_iterative.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@ -c
 
-./src/image.o: ./src/image.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@ -c
+# ./src/image.o: ./src/image.c
+# 	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@ -c
 
 ./src/moment.o: ./src/moment.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@ -c
