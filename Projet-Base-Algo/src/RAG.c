@@ -24,6 +24,7 @@ static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des 
 	r->m = malloc(r->nb_blocks * sizeof(struct moments));
 	for (i = 0; i < r->nb_blocks; i++) {
 		give_moments(r->img, i, n, m, &(r->m[i].M0), r->m[i].M1, r->m[i].M2);
+		printf("%d\n", r->m[i].M0);
 	}
 }
 
