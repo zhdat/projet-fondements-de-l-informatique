@@ -18,7 +18,7 @@
     *
     
 
-* @todo Une meilleur gestion des images en niveau de gris * @bug Image au format ".pgm".
+* @todo Résoudre fusions verticale. * @bug Fusions uniquement horizontale.
 */
 
 /**  
