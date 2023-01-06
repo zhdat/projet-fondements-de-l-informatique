@@ -169,5 +169,5 @@ extern void RAG_normalize_parents(rag r);
 * @param average_color .
 * 
 */
-extern void RAG_give_mean_color(rag r, int indice_block, int *average_color);
+extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_color);
 #endif
