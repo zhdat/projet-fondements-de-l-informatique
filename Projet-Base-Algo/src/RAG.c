@@ -6,7 +6,7 @@
  * This file is owned by ENSICAEN students.
  * No portion of this document may be reproduced, copied
  * or revised without written permission of the authors.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,7 +119,7 @@ static void free_neighbors_priv(rag r){
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
-		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0); 
+		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
 	}
 }
 
@@ -156,6 +156,29 @@ extern void free_RAG(rag r){
 	free(r);
 }
 
+double get_erreur(rag r, int i, int j) {
+    double mu_B[3];
+    double mu_Bp[3];
+    double diff_mu[3];
+    double norme_2;
+    double erreur;
+
+    mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
+    mu_B[1] = r->m[i].M1[1] / r->m[i].M0;
+    mu_B[2] = r->m[i].M1[2] / r->m[i].M0;
+    mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
+    mu_Bp[1] = r->m[j].M1[1] / r->m[j].M0;
+    mu_Bp[2] = r->m[j].M1[2] / r->m[j].M0;
+
+    diff_mu[0] = mu_B[0] - mu_Bp[0];
+    diff_mu[1] = mu_B[1] - mu_Bp[1];
+    diff_mu[2] = mu_B[2] - mu_Bp[2];
+
+    norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
+
+    erreur = ((r->m[i].M0 * r->m[j].M0) / (r->m[i].M0 + r->m[j].M0)) * norme_2;
+    return erreur;
+}
 
 /**  
 * A complete description of the function.  
@@ -167,43 +190,30 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	int j;
 	double erreur_min;
 	double erreur;
-	double mu_B[3];
-	double mu_Bp[3];
-	double diff_mu[3];
-	double norme_2;
-	erreur = 0;
 	erreur_min = -1;
 	*indice1_block = 0;
 	*indice2_block = 1;
+
 	for (i = 0; i < r->nb_blocks; i++) { /* @TODO (voisins) */
 		if (r->father[i] == i) {
-			for (j = i + 1; j < r->nb_blocks; j++) {
-				if (r->father[j] == j && (j == r->neighbors[i] || j == r->neighbors[i]->next)) {
-
-					mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
-					mu_B[1] = r->m[i].M1[1] / r->m[i].M0;
-					mu_B[2] = r->m[i].M1[2] / r->m[i].M0;
-					mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
-					mu_Bp[1] = r->m[j].M1[1] / r->m[j].M0;
-					mu_Bp[2] = r->m[j].M1[2] / r->m[j].M0;
-
-					diff_mu[0] = mu_B[0] - mu_Bp[0];
-					diff_mu[1] = mu_B[1] - mu_Bp[1];
-					diff_mu[2] = mu_B[2] - mu_Bp[2];
-
-					norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
-
-					erreur = ((r->m[i].M0 * r->m[j].M0) / (r->m[i].M0 + r->m[j].M0)) * norme_2; 
-				}
-				if (erreur < erreur_min || erreur_min == -1) {
-					erreur_min = erreur;
-					*indice1_block = i;
-					*indice2_block = j;
-				}
-			}
+            cellule c = r->neighbors[i];
+            while (c != NULL) {
+                j = c->block;
+                while (r->father[j] != j) {
+                    j = r->father[j];
+                }
+                if (i != j) {
+                    erreur = get_erreur(r, i, j);
+                    if (erreur_min == -1 || erreur < erreur_min) {
+                        erreur_min = erreur;
+                        *indice1_block = i;
+                        *indice2_block = j;
+                    }
+                }
+                c = c->next;
+            }
 		}
 	}
-	printf("BIP\n");
 	return erreur_min;
 }
 
