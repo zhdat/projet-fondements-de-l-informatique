@@ -296,16 +296,6 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 	double diff_mu[3];
 	double norme_2;
 
-
-	/* Mise à jour du tableau father */
-	r->father[region1] = region2;
-
-	/* Mise à jour des moments */
-	update_moments_priv(r, region1, region2);
-
-	/* Mise à jour des listes de voisins des deux régions fusionnées */
-	update_neighbors_priv(r, region1, region2);
-
 	/* Mise à jour de l'erreur de partition */
 	if (r->m[region1].M1[1] == -1){
 		mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
@@ -333,6 +323,16 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 
 		r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * norme_2;
 	}
+
+
+	/* Mise à jour du tableau father */
+	r->father[region1] = region2;
+
+	/* Mise à jour des moments */
+	update_moments_priv(r, region1, region2);
+
+	/* Mise à jour des listes de voisins des deux régions fusionnées */
+	update_neighbors_priv(r, region1, region2);
 	
 }
 
