@@ -57,12 +57,14 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
     int mean_color[3];
-    nbr_pixel_colonne = image_give_largeur(img) / n;
-    nbr_pixel_ligne = image_give_hauteur(img) / m;
+    nbr_colonne = image_give_largeur(img) / n;
+    nbr_ligne = image_give_hauteur(img) / m;
+    nbr_pixel_colonne = L / nbr_colonne;
+    nbr_pixel_ligne = H / nbr_ligne;
     image_initialize(img_out, dim, L, H);
     for (k = 0; k < n * m; k++){
-        pixel_start_x = nbr_pixel_colonne * k % m;
-        pixel_start_y = nbr_pixel_ligne * k / m;
+        pixel_start_x = nbr_colonne * k % m;
+        pixel_start_y = nbr_ligne * k / m;
         c = k;
         while (r->father[c] != c){
             c = r->father[c];
