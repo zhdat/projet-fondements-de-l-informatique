@@ -40,7 +40,7 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
 }
 
 image create_output_image(rag r, int n, int m){ /* crée une image où chaque block est affiché avec la couleur moyenne de son block parent. */
-    int i;
+/*    int i;
     int j;
     int k;
     int pixel_start_x;
@@ -73,6 +73,37 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
         }
     }
 
+    return img_out; */
+    int i;
+    int j;
+    image img = adj->img;
+    image img_out;
+    int dim = image_give_dim(img);
+    int L = image_give_largeur(img);
+    int H = image_give_hauteur(img);
+    int mean_color[3];
+    unsigned char mean_tab[3]; 
+    int n_block;
+    img_out = FAIRE_image();
+    image_initialize(img_out, dim, L, H);
+    int k;
+    /*
+    for (i=0; i<nb_blocks; i++){
+        mean_tab[i] = 
+    }*/
+    for (i=0; i<H; i++){
+        for (j=0; j<L; j++){
+            n_block = j/(L/n) + (i/(H/m))*n;
+            
+            RAG_give_mean_color(adj, n_block, mean_color);
+            printf("%d %d %d\n",mean_color[0],mean_color[1],mean_color[2]);
+            for (k=0; k<3; k++){
+                mean_tab[k] = (unsigned char)mean_color[k];
+            }
+            image_write_pixel(img_out, i, j, mean_tab);
+        }
+    }
     return img_out;
-    
 }
+    
+
