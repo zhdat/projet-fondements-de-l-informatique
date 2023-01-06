@@ -18,6 +18,7 @@
 
 extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double *M1, double *M2) {
 
+    /* Déclaration */
     int pixel_start_x;
     int pixel_start_y;
     Point p;
@@ -32,11 +33,12 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
     double B2;
     double GR2;
     int tableau_RGB[3];
-
     int nbr_pixel_colonne;
     int nbr_pixel_ligne;
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
+
+    /* Initialisation */
     nbr_pixel_colonne = H / m;
     nbr_pixel_ligne = L / n;
     pixel_start_x = (num_bloc % n) * nbr_pixel_ligne;
@@ -56,19 +58,17 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
     G2 = 0;
     B2 = 0;
     GR2 = 0;
-
-
     COORDX(p) = pixel_start_x;
     COORDY(p) = pixel_start_y;
     image_move_to(img, &p);
 
+    /* Calcul des moments (image couleur) */
     if (image_give_dim(img) == 3) {
         for (i = 0; i < nbr_pixel_colonne; i++) {
             for (j = 0; j < nbr_pixel_ligne; j++) {
                 COORDX(p) = pixel_start_x + j;
                 COORDY(p) = pixel_start_y + i;
                 image_move_to(img, &p);
-
                 tableau_RGB[0] = image_lire_pixel(img)[0];
                 tableau_RGB[1] = image_lire_pixel(img)[1];
                 tableau_RGB[2] = image_lire_pixel(img)[2];
@@ -91,16 +91,15 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
         M2[1] = G2;
         M2[2] = B2;
 
-    } else {
+    } else { /* Calcul des moments (image nuances de gris) */
         for (i = 0; i < nbr_pixel_colonne; i++) {
             for (j = 0; j < nbr_pixel_ligne; j++) {
                 COORDX(p) = pixel_start_x + j;
                 COORDY(p) = pixel_start_y + i;
                 image_move_to(img, &p);
-
                 tableau_RGB[0] = image_lire_pixel(img)[0];
-                R += tableau_RGB[0];
-                R2 += tableau_RGB[0] * tableau_RGB[0];
+                GR += tableau_RGB[0];
+                GR2 += tableau_RGB[0] * tableau_RGB[0];
                 *M0 += 1;
             }
         }

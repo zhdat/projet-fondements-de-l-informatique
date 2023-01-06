@@ -14,7 +14,7 @@
 
 -   * @author Calliste RAVIX <calliste.ravix@ecole.ensicaen.fr>
     
--   * @author Maxime MICHEL <maxime.michel@ecole.ensicaen.fr> * @version 0.1.0 - 2023-01-05  
+-   * @author Maxime MICHEL <maxime.michel@ecole.ensicaen.fr> * @version 0.2.0 - 2023-01-05
     *
     
 
