@@ -61,10 +61,10 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     int mean_color[3];
     nbr_pixel_colonne = image_give_largeur(img) / n;
     nbr_pixel_ligne = image_give_hauteur(img) / m;
-    pixel_start_x = nbr_colonne * num_bloc % m;
-    pixel_start_y = nbr_ligne * num_bloc / m;
     image_initialize(img_out, dim, L, H);
     for (k = 0; k < n * m; k++){
+        pixel_start_x = nbr_colonne * k % m;
+        pixel_start_y = nbr_ligne * k / m;
         c = k;
         while (r->father[c] != c){
             c = r->father[c];
