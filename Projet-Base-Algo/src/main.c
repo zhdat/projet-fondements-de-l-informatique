@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
       return 1;
    }
 
-   if (atoi(argv[2] % image_give_largeur(img) != 0) || (atoi(argv[3] % image_give_hauteur(img) != 0)) {
+   if ((atoi(argv[2]) % image_give_largeur(img) != 0) || (atoi(argv[3]) % image_give_hauteur(img) != 0)) {
       printf("Erreur : nombre de blocks incorrect.\n");
       return 1;
    }
