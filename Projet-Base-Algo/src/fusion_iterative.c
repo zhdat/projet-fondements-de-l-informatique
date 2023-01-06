@@ -16,7 +16,7 @@
 #include "fusion_iterative.h"
 
 
-void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions de régions jusqu'à ce que l'erreur de partition soit inférieure au seuil passé en second paramètre. */
+void perform_merge(rag r, double seuil) {
     double erreur_init;
     double erreur_seuil;
     double erreur_after_merge;
@@ -29,8 +29,7 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     erreur_after_merge = erreur_init;
     tmp = RAG_give_closest_region(r, &i, &j);
 
-    while (erreur_after_merge < erreur_seuil && tmp != -1)
-    {
+    while (erreur_after_merge < erreur_seuil && tmp != -1) {
         RAG_merge_regions(r, i, j);
         erreur_after_merge += RAG_give_closest_region(r, &i, &j);
         tmp = RAG_give_closest_region(r, &i, &j);
@@ -38,7 +37,7 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     }
 }
 
-image create_output_image(rag r, int n, int m){ /* crée une image où chaque block est affiché avec la couleur moyenne de son block parent. */
+image create_output_image(rag r, int n, int m) {
     int i;
     int j;
     int k;
@@ -71,7 +70,5 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
             }
         }
     }
-
     return img_out;
-    
 }
