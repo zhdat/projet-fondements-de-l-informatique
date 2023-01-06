@@ -40,11 +40,9 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
 }
 
 image create_output_image(rag r, int n, int m){ /* crée une image où chaque block est affiché avec la couleur moyenne de son block parent. */
-    int i;
+/*    int i;
     int j;
     int k;
-    int nbr_colonne;
-    int nbr_ligne;
     int pixel_start_x;
     int pixel_start_y;
     int nbr_pixel_colonne;
@@ -57,10 +55,8 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
     int mean_color[3];
-    nbr_colonne = image_give_largeur(img) / n;
-    nbr_ligne = image_give_hauteur(img) / m;
-    nbr_pixel_colonne = L / nbr_colonne;
-    nbr_pixel_ligne = H / nbr_ligne;
+    nbr_pixel_colonne = H / m;
+    nbr_pixel_ligne = L / n;
     image_initialize(img_out, dim, L, H);
     for (k = 0; k < n * m; k++){
         pixel_start_x = nbr_colonne * k % m;
@@ -70,13 +66,44 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
             c = r->father[c];
         }
         RAG_give_mean_color(r, c, mean_color);
-        for (i = pixel_start_x; i < pixel_start_x + nbr_pixel_colonne; i++){
-            for (j = pixel_start_y; j < pixel_start_y + nbr_pixel_ligne; j++){
+        for (i = pixel_start_y; i < pixel_start_y + nbr_pixel_ligne; i++){
+            for (j = pixel_start_x; j < pixel_start_x + nbr_pixel_colonne; j++){
                 image_write_pixel(img_out, i, j, (unsigned char *) mean_color);
             }
         }
     }
 
+    return img_out; */
+    int i;
+    int j;
+    image img = adj->img;
+    image img_out;
+    int dim = image_give_dim(img);
+    int L = image_give_largeur(img);
+    int H = image_give_hauteur(img);
+    int mean_color[3];
+    unsigned char mean_tab[3]; 
+    int n_block;
+    img_out = FAIRE_image();
+    image_initialize(img_out, dim, L, H);
+    int k;
+    /*
+    for (i=0; i<nb_blocks; i++){
+        mean_tab[i] = 
+    }*/
+    for (i=0; i<H; i++){
+        for (j=0; j<L; j++){
+            n_block = j/(L/n) + (i/(H/m))*n;
+            
+            RAG_give_mean_color(adj, n_block, mean_color);
+            printf("%d %d %d\n",mean_color[0],mean_color[1],mean_color[2]);
+            for (k=0; k<3; k++){
+                mean_tab[k] = (unsigned char)mean_color[k];
+            }
+            image_write_pixel(img_out, i, j, mean_tab);
+        }
+    }
     return img_out;
-    
 }
+    
+
