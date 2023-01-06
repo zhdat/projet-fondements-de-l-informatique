@@ -1,4 +1,20 @@
 How to install this program
- 
-bla bla bla
-bli bli bli
+
+1. Download the program from the link below :
+     https://gitlab.ecole.ensicaen.fr/ravix/projet-fondements-de-l-informatique.git
+
+2. Open the terminal and go to the folder where you downloaded the program.
+
+3. Type the following command to compile the program :
+     make
+
+4. Type the following command to run the program :
+    ./bin/prog <file_name> <number_of_blocks_in_line> <number_of_blocks_in_columns> <threshold>
+
+    where <file_name> is the name of the file you want to read.
+    <number_of_blocks_in_line> is the number of blocks in a line.
+    <number_of_blocks_in_columns> is the number of blocks in a column.
+    <threshold> is the threshold of the program.
+
+    Example : ./bin/prog image.ppm 64 64 2.
+
