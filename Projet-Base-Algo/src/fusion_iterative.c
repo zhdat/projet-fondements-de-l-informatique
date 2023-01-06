@@ -32,8 +32,6 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     erreur_after_merge += RAG_give_closest_region(r, &i, &j);
     while (erreur_after_merge < erreur_seuil && tmp != -1)
     {
-        printf("erreur_after_merge : %f\n", erreur_after_merge);
-        printf("erreur_seuil : %f\n", erreur_seuil);
         RAG_merge_regions(r, i, j);
         erreur_after_merge += RAG_give_closest_region(r, &i, &j);
         tmp = RAG_give_closest_region(r, &i, &j);
@@ -51,7 +49,7 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     int pixel_start_y;
     int nbr_pixel_colonne;
     int nbr_pixel_ligne;
-    cellule c;
+    int c;
     image img = r->img;
     image img_out;
     img_out = FAIRE_image();
@@ -63,8 +61,8 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     nbr_pixel_ligne = image_give_hauteur(img) / m;
     image_initialize(img_out, dim, L, H);
     for (k = 0; k < n * m; k++){
-        pixel_start_x = nbr_colonne * k % m;
-        pixel_start_y = nbr_ligne * k / m;
+        pixel_start_x = nbr_pixel_colonne * k % m;
+        pixel_start_y = nbr_pixel_ligne * k / m;
         c = k;
         while (r->father[c] != c){
             c = r->father[c];
