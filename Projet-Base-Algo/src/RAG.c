@@ -14,28 +14,6 @@
 #include "moment.h"
 #include "image.h"
 
-struct moments {
-    int M0;
-    double M1[3];
-    double M2[3];
-};
-
-
-struct cellule {
-    int block;
-    cellule next;
-};
-
-
-struct RAG {
-    image  img;
-    int nb_blocks;
-    long double erreur_partition;
-    moments m;
-    int * father;
-    cellule *neighbors;
-};
-
 /**  
 * Permet d'initialiser les moments de la structure RAG.  
 *  
