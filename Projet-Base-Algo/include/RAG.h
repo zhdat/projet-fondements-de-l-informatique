@@ -85,7 +85,11 @@ extern double RAG_give_closest_region(rag r, int * i, int * j);
 
 
 /**  
-* Fusionne les deux régions passées en paramètres en effectuant : - Mise à jour du tableau father ; - Mise à jour des moments ; - Mise à jour des listes des deux régions fusionnées ; - Mise à jour de l'erreur de partition.  
+* Fusionne les deux régions passées en paramètres en effectuant :
+* - Mise à jour du tableau father
+* - Mise à jour des moments
+* - Mise à jour des listes des deux régions fusionnées
+* - Mise à jour de l'erreur de partition.
 *  
 * @param r structure RAG.
 * @param i indice de block.

@@ -110,7 +110,5 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
         M2[0] = GR2;
         M2[1] = -1;
         M2[2] = -1;
-
     }
-
 }

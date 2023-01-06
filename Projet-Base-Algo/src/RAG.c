@@ -46,7 +46,7 @@ static void free_moments_priv(rag r){
 * @param r structure RAG.
 * 
 */
-static void init_father_priv(rag r){ /* Initialise le père de chaque block à lui même. */
+static void init_father_priv(rag r){
 	int i;
 	r->father = malloc(r->nb_blocks * sizeof(int));
 	for (i = 0; i < r->nb_blocks; i++) {
@@ -72,7 +72,7 @@ static void free_father_priv(rag r){
 * @param m nombre de blocks par colonne.
 * 
 */
-static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes de voisins de chaque blocks */
+static void init_neighbors_priv(rag r, int n, int m){
 	int i;
 	int j;
 	int k;
@@ -126,7 +126,7 @@ static void free_neighbors_priv(rag r){
 * @param r structure RAG.
 * 
 */
-static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
+static void init_partition_error_priv(rag r){
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
 		if (r->m[i].M1[1] == -1){
@@ -137,17 +137,17 @@ static void init_partition_error_priv(rag r){ /* initialise l'erreur de partitio
 	}
 }
 
-extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une image et de la taille des blocks. */
+extern rag create_RAG(image img, int n, int m){
 	rag r = malloc(sizeof(struct RAG));
 	r->img = img;
 	r->nb_blocks = n * m;
 	r->erreur_partition = 0;
 
-	init_father_priv(r);
-	init_neighbors_priv(r, n, m);
+	init_father_priv(r); /* Initialisation des parents */
+	init_neighbors_priv(r, n, m); /* Initialisation des voisins */
 
-	init_moments_priv(r, n, m);
-	init_partition_error_priv(r);
+	init_moments_priv(r, n, m); /* Initialisation des moments */
+	init_partition_error_priv(r); /* Initialisation de l'erreur de partition */
 	return r;
 }
 
@@ -165,7 +165,7 @@ double get_erreur(rag r, int i, int j) {
     double norme_2;
     double erreur;
 
-    if (r->m[i].M1[1] == -1){
+    if (r->m[i].M1[1] == -1){ /* Erreur dans le cas où l'image est en nuance de gris. */
     	mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
 		mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
 
@@ -177,7 +177,7 @@ double get_erreur(rag r, int i, int j) {
 
 		return erreur;
 
-    } else {
+    } else { /* Erreur dans le cas où l'image est en couleur. */
     	mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
 	    mu_B[1] = r->m[i].M1[1] / r->m[i].M0;
 	    mu_B[2] = r->m[i].M1[2] / r->m[i].M0;
@@ -197,7 +197,7 @@ double get_erreur(rag r, int i, int j) {
 
 }
 
-extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_block){ /* renvoie les deux indices de blocks dont la fusion induit la plus petite augmentation d'erreur quadratique. Seuls les blocks vérifiant father[i]==i seront pris en compte dans le calcul. Cette fonction renvoie la valeur de cette augmentation. */
+extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_block){
 	int i;
 	int j;
 	double erreur_min;
@@ -241,11 +241,11 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 static void update_moments_priv(rag r, int region1, int region2){
 	int i;
 	r->m[region2].M0 = r->m[region1].M0 + r->m[region2].M0;
-	if (r->m[region1].M1[1] == -1) {
+	if (r->m[region1].M1[1] == -1) { /* Dans le cas où l'image est en nuance de gris. */
 		r->m[region2].M1[0] = r->m[region1].M1[0] + r->m[region2].M1[0];
 		r->m[region2].M2[0] = r->m[region1].M2[0] + r->m[region2].M2[0];
 	} else {
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; i++) { /* Dans le cas où l'image est en couleur. */
 			r->m[region2].M1[i] = r->m[region1].M1[i] + r->m[region2].M1[i];
 			r->m[region2].M2[i] = r->m[region1].M2[i] + r->m[region2].M2[i];
 		}
@@ -280,7 +280,7 @@ void RAG_merge_regions(rag r, int region1, int region2){
 	double norme_2;
 
 	/* Mise à jour de l'erreur de partition */
-	if (r->m[region1].M1[1] == -1){
+	if (r->m[region1].M1[1] == -1){ /* Dans le cas où l'image est en nuance de gris. */
 		mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
 		mu_Bp[0] = r->m[region2].M1[0] / r->m[region2].M0;
 
@@ -290,7 +290,7 @@ void RAG_merge_regions(rag r, int region1, int region2){
 
 		r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * norme_2;
 
-	} else {
+	} else { /* Dans le cas où l'image est en couleur. */
 		mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
 		mu_B[1] = r->m[region1].M1[1] / r->m[region1].M0;
 		mu_B[2] = r->m[region1].M1[2] / r->m[region1].M0;
@@ -319,20 +319,20 @@ void RAG_merge_regions(rag r, int region1, int region2){
 	
 }
 
-extern void RAG_normalize_parents(rag r){ /* effectue un parcours rétrograde du tableau father en remplçant pour chaque indice i, father[i] par father[father[i]]. */
+extern void RAG_normalize_parents(rag r){
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
 		r->father[i] = r->father[r->father[i]];
 	}
 }
 
-extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_color){ /* renvoie dans le dernier paramètre la courleur moyenne du block parent du block dont l'indice est passé en second paramètre. */
+extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_color){
 	int i;
 	int indice_parent = r->father[indice_block];
 
-	if (r->m[indice_parent].M1[1] == -1){
+	if (r->m[indice_parent].M1[1] == -1){ /* Dans le cas où l'image est en nuance de gris. */
 		average_color[0] = r->m[indice_parent].M1[0] / r->m[indice_parent].M0;
-	} else {
+	} else { /* Dans le cas où l'image est en couleur. */
 		for (i = 0; i < 3; i++) {
 		 average_color[i] = r->m[indice_parent].M1[i] / r->m[indice_parent].M0;
 		}
