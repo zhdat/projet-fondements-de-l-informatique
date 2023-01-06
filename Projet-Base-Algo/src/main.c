@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
    r = create_RAG(img, n, m);
    perform_merge(r, seuil);
    img_out = create_output_image(r, atoi(argv[2]), atoi(argv[3]));
-   image_sauvegarder(img_out, "output.ppm");
+   image_sauvegarder(img_out, "output.pgm");
    free_RAG(r);
    return EXIT_SUCCESS;
 }
