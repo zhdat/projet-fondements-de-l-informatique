@@ -49,6 +49,8 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     int nbr_ligne;
     int pixel_start_x;
     int pixel_start_y;
+    int nbr_pixel_colonne;
+    int nbr_pixel_ligne;
     cellule c;
     image img = r->img;
     image img_out;
