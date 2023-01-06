@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
    seuil = atof(argv[4]);
    r = create_RAG(img, n, m);
    perform_merge(r, seuil);
-   img_out = create_output_image(r);
+   img_out = create_output_image(r, atoi(argv[2]), atoi(argv[3]));
    image_sauvegarder(img_out, "output.ppm");
    free_RAG(r);
    return EXIT_SUCCESS;

@@ -41,9 +41,15 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     }
 }
 
-image create_output_image(rag r){ /* crée une image où chaque block est affiché avec la couleur moyenne de son block parent. */
+image create_output_image(rag r, int n, int m){ /* crée une image où chaque block est affiché avec la couleur moyenne de son block parent. */
     int i;
     int j;
+    int k;
+    int nbr_colonne;
+    int nbr_ligne;
+    int pixel_start_x;
+    int pixel_start_y;
+    cellule c;
     image img = r->img;
     image img_out;
     img_out = FAIRE_image();
@@ -51,16 +57,23 @@ image create_output_image(rag r){ /* crée une image où chaque block est affich
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
     int mean_color[3];
+    nbr_pixel_colonne = image_give_largeur(img) / n;
+    nbr_pixel_ligne = image_give_hauteur(img) / m;
+    pixel_start_x = nbr_colonne * num_bloc % m;
+    pixel_start_y = nbr_ligne * num_bloc / m;
     image_initialize(img_out, dim, L, H);
-    for (i = 0; i < H; i++)
-    {
-        for (j = 0; j < L; j++)
-        {
-            RAG_give_mean_color(r, indice_block, mean_color);
-            image_write_pixel(img_out, i, j, (unsigned char *) mean_color);
+    for (k = 0; k < n * m; k++){
+        c = k;
+        while (r->father[c] != c){
+            c = r->father[c];
+        }
+        RAG_give_mean_color(r, c, mean_color);
+        for (i = pixel_start_x; i < pixel_start_x + nbr_pixel_colonne; i++){
+            for (j = pixel_start_y; j < pixel_start_y + nbr_pixel_ligne; j++){
+                image_write_pixel(img_out, i, j, (unsigned char *) mean_color);
+            }
         }
     }
-
 
     return img_out;
     
