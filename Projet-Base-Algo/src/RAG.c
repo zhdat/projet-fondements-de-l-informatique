@@ -165,8 +165,6 @@ extern void free_RAG(rag r){
 extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_block){ /* renvoie les deux indices de blocks dont la fusion induit la plus petite augmentation d'erreur quadratique. Seuls les blocks vérifiant father[i]==i seront pris en compte dans le calcul. Cette fonction renvoie la valeur de cette augmentation. */
 	int i;
 	int j;
-	int i_min;
-	int j_min;
 	double erreur_min;
 	double erreur;
 	double mu_B[3];
@@ -175,22 +173,19 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	double norme_2;
 	erreur = 0;
 	erreur_min = -1;
-	i_min = 0;
-	j_min = 0;
+	*indice1_block = 0;
+	*indice2_block = 1;
 	for (i = 0; i < r->nb_blocks; i++) { /* @TODO (voisins) */
 		if (r->father[i] == i) {
 			for (j = i + 1; j < r->nb_blocks; j++) {
 				if (r->father[j] == j) {
 
-					/* mu_B = (r->m[*indice1_block].M1[0] + r->m[*indice1_block].M1[1] + r->m[*indice1_block].M1[2]) / 3 * r->m[*indice1_block].M0; */
-					/* mu_Bp = (r->m[*indice2_block].M1[0] + r->m[*indice2_block].M1[1] + r->m[*indice2_block].M1[2]) / 3 * r->m[*indice2_block].M0; */
-
-					mu_B[0] = r->m[*indice1_block].M1[0] / r->m[*indice1_block].M0;
-					mu_B[1] = r->m[*indice1_block].M1[1] / r->m[*indice1_block].M0;
-					mu_B[2] = r->m[*indice1_block].M1[2] / r->m[*indice1_block].M0;
-					mu_Bp[0] = r->m[*indice2_block].M1[0] / r->m[*indice2_block].M0;
-					mu_Bp[1] = r->m[*indice2_block].M1[1] / r->m[*indice2_block].M0;
-					mu_Bp[2] = r->m[*indice2_block].M1[2] / r->m[*indice2_block].M0;
+					mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
+					mu_B[1] = r->m[i].M1[1] / r->m[i].M0;
+					mu_B[2] = r->m[i].M1[2] / r->m[i].M0;
+					mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
+					mu_Bp[1] = r->m[j].M1[1] / r->m[j].M0;
+					mu_Bp[2] = r->m[j].M1[2] / r->m[j].M0;
 
 					diff_mu[0] = mu_B[0] - mu_Bp[0];
 					diff_mu[1] = mu_B[1] - mu_Bp[1];
@@ -198,14 +193,12 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 
 					norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
 
-					erreur = ((r->m[*indice1_block].M0 * r->m[*indice2_block].M0) / (r->m[*indice1_block].M0 + r->m[*indice2_block].M0)) * norme_2; 
+					erreur = ((r->m[i].M0 * r->m[j].M0) / (r->m[i].M0 + r->m[j].M0)) * norme_2; 
 				}
-				if (erreur < erreur_min) {
+				if (erreur < erreur_min || erreur_min == -1) {
 					erreur_min = erreur;
-					i_min = i;
-					j_min = j;
-					*indice1_block = i_min;
-					*indice2_block = j_min;
+					*indice1_block = i;
+					*indice2_block = j;
 				}
 			}
 		}
