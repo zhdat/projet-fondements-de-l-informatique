@@ -118,7 +118,7 @@ static void free_neighbors_priv(rag r){
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
-		if (r->m[i].M1[1] == NULL){
+		if (r->m[i].M1[1] == -1){
 			r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0);
 		}else {
 			r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
@@ -166,7 +166,7 @@ double get_erreur(rag r, int i, int j) {
     double norme_2;
     double erreur;
 
-    if (r->m[i].M1[1] == NULL){
+    if (r->m[i].M1[1] == -1){
     	mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
 		mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
 
@@ -244,7 +244,7 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 static void update_moments_priv(rag r, int region1, int region2){ /* Met à jour les moments de la région fusionnée. */
 	int i;
 	r->m[region2].M0 = r->m[region1].M0 + r->m[region2].M0;
-	if (r->m[region1].M1[1] == NULL) {
+	if (r->m[region1].M1[1] == -1) {
 		r->m[region2].M1[0] = r->m[region1].M1[0] + r->m[region2].M1[0];
 		r->m[region2].M2[0] = r->m[region1].M2[0] + r->m[region2].M2[0];
 	} else {
@@ -296,7 +296,7 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 	update_neighbors_priv(r, region1, region2);
 
 	/* Mise à jour de l'erreur de partition */
-	if (r->m[region1].M1[1] == NULL){
+	if (r->m[region1].M1[1] == -1){
 		mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
 		mu_Bp[0] = r->m[region2].M1[0] / r->m[region2].M0;
 
@@ -347,7 +347,7 @@ extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_
 	int i;
 	int indice_parent = r->father[indice_block];
 
-	if (r->m[indice_parent].M1[1] == NULL){
+	if (r->m[indice_parent].M1[1] == -1){
 		average_color[0] = r->m[indice_parent].M1[0] / r->m[indice_parent].M0;
 	} else {
 		for (i = 0; i < 3; i++) {
