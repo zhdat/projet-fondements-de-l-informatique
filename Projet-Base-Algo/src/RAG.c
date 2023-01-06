@@ -15,9 +15,12 @@
 #include "image.h"
 
 /**  
-* A complete description of the function.  
+* Permet d'initialiser les moments de la structure RAG.  
 *  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+* @param r structure RAG.
+* @param n nombre de blocks par ligne.
+* @param m nombre de blocks par colonne.
+*   
 */
 static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des blocks à l'aide de give_moments() */
 	int i;
@@ -28,18 +31,20 @@ static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des 
 }
 
 /**  
-* A complete description of the function.  
+* Permet de désallouer les moments de la structure RAG.  
 *  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+* @param r structure RAG. 
+*   
 */
 static void free_moments_priv(rag r){
 	free(r->m);
 }
 
 /**  
-* A complete description of the function.  
+* Permet d'initialiser les parents des cellules.  
 *  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+* @param r structure RAG.
+* 
 */
 static void init_father_priv(rag r){ /* Initialise le père de chaque block à lui même. */
 	int i;
@@ -50,18 +55,22 @@ static void init_father_priv(rag r){ /* Initialise le père de chaque block à l
 }
 
 /**  
-* A complete description of the function.  
+* Permet de désallouer les parents des cellules.  
 *  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+* @param r structure RAG. 
+*   
 */
 static void free_father_priv(rag r){
 	free(r->father);
 }
 
 /**  
-* A complete description of the function.  
+* Permet d'initialiser les voisins des cellules.  
 *  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+* @param r structure RAG.
+* @param n nombre de blocks par ligne.
+* @param m nombre de blocks par colonne.
+* 
 */
 static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes de voisins de chaque blocks */
 	int i;
@@ -92,9 +101,10 @@ static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes d
 
 
 /**  
-* A complete description of the function.  
+* Permet de désallouer les voisins des cellules.  
 *  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+* @param r structure RAG. 
+*   
 */
 static void free_neighbors_priv(rag r){
 	int i;
@@ -111,9 +121,10 @@ static void free_neighbors_priv(rag r){
 
 
 /**  
-* A complete description of the function.  
+* Permet d'initialiser l'erreur de partitions.  
 *  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+* @param r structure RAG.
+* 
 */
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;

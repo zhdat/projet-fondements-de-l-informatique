@@ -23,8 +23,6 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
     Point p;
     int i;
     int j;
-    int nbr_pixel;
-    int tmp;
     double R;
     double G;
     double B;
@@ -43,8 +41,6 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
     nbr_pixel_ligne = L / n;
     pixel_start_x = (num_bloc % n) * nbr_pixel_ligne;
     pixel_start_y = (num_bloc / n) * nbr_pixel_colonne;
-    nbr_pixel = n * m;
-    tmp = 0;
     *M0 = 0;
     M1[0] = 0;
     M1[1] = 0;
