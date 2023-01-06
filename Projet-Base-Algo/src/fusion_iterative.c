@@ -54,21 +54,21 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     int dim = image_give_dim(img);
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
-    int mean_color[3];
+    unsigned char mean_color[3];
     nbr_pixel_colonne = H / m;
     nbr_pixel_ligne = L / n;
     image_initialize(img_out, dim, L, H);
     for (k = 0; k < n * m; k++){
-        pixel_start_x = nbr_colonne * k % m;
-        pixel_start_y = nbr_ligne * k / m;
+        pixel_start_x = (k % n) * nbr_pixel_ligne;
+        pixel_start_y = (k / n) * nbr_pixel_colonne;
         c = k;
         while (r->father[c] != c){
             c = r->father[c];
         }
         RAG_give_mean_color(r, c, mean_color);
-        for (i = pixel_start_y; i < pixel_start_y + nbr_pixel_ligne; i++){
-            for (j = pixel_start_x; j < pixel_start_x + nbr_pixel_colonne; j++){
-                image_write_pixel(img_out, i, j, (unsigned char *) mean_color);
+        for (i = pixel_start_x; i < pixel_start_x + nbr_pixel_ligne; i++){
+            for (j = pixel_start_y; j < pixel_start_y + nbr_pixel_colonne; j++){
+                image_write_pixel(img_out, j, i, mean_color);
             }
         }
     }

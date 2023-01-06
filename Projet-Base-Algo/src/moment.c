@@ -6,7 +6,7 @@
  * This file is owned by ENSICAEN students.
  * No portion of this document may be reproduced, copied
  * or revised without written permission of the authors.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,10 +16,8 @@
 #include "point.h"
 #include "image.c"
 
-extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double* M1, double* M2){
-    
-    int nbr_ligne; /* Ligne du block */
-    int nbr_colonne; /* Colonne du block */
+extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double *M1, double *M2) {
+
     int pixel_start_x;
     int pixel_start_y;
     Point p;
@@ -35,13 +33,17 @@ extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double*
     double G2;
     double B2;
     double GR2;
-    double tableau_RGB[3];
+    int tableau_RGB[3];
 
-    nbr_colonne = image_give_largeur(img) / n;
-    nbr_ligne = image_give_hauteur(img) / m;
-    pixel_start_x = nbr_colonne * num_bloc % m;
-    pixel_start_y = nbr_ligne * num_bloc / m;
-    nbr_pixel = nbr_colonne * nbr_ligne;
+    int nbr_pixel_colonne;
+    int nbr_pixel_ligne;
+    int L = image_give_largeur(img);
+    int H = image_give_hauteur(img);
+    nbr_pixel_colonne = H / m;
+    nbr_pixel_ligne = L / n;
+    pixel_start_x = (num_bloc % n) * nbr_pixel_ligne;
+    pixel_start_y = (num_bloc / n) * nbr_pixel_colonne;
+    nbr_pixel = n * m;
     tmp = 0;
     *M0 = 0;
     M1[0] = 0;
@@ -64,122 +66,28 @@ extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double*
     COORDY(p) = pixel_start_y;
     image_move_to(img, &p);
 
-    if (image_give_dim(img) == 3){
-        while (tmp < nbr_pixel)
-        {
-          if (nbr_ligne % 2 == 0){
-            for (i = 0; i < nbr_ligne / 2 - 1; i++){
-                for (j = 0; j < nbr_colonne; j++){
-                    tableau_RGB[0] = image_lire_pixel(img)[0];
-                    tableau_RGB[1] = image_lire_pixel(img)[1];
-                    tableau_RGB[2] = image_lire_pixel(img)[2];
-                    R = R + tableau_RGB[0];
-                    R2 = R2 + tableau_RGB[0] * tableau_RGB[0];
-                    G = G + tableau_RGB[1];
-                    G2 = G2 + tableau_RGB[1] * tableau_RGB[1];
-                    B = B + tableau_RGB[2];
-                    B2 = B2 + tableau_RGB[2] * tableau_RGB[2];
-                    tmp += 1;
-                    *M0 += 1;
-                    image_pixel_droite(img);
-                }
-                image_pixel_dessous(img);
+    if (image_give_dim(img) == 3) {
+        for (i = 0; i < nbr_pixel_colonne; i++) {
+            for (j = 0; j < nbr_pixel_ligne; j++) {
+                COORDX(p) = pixel_start_x + j;
+                COORDY(p) = pixel_start_y + i;
+                image_move_to(img, &p);
 
-                for (j = 0; j < nbr_colonne; j++){
-                    tableau_RGB[0] = image_lire_pixel(img)[0];
-                    tableau_RGB[1] = image_lire_pixel(img)[1];
-                    tableau_RGB[2] = image_lire_pixel(img)[2];
-                    R = R + tableau_RGB[0];
-                    R2 = R2 + tableau_RGB[0] * tableau_RGB[0];
-                    G = G + tableau_RGB[1];
-                    G2 = G2 + tableau_RGB[1] * tableau_RGB[1];
-                    B = B + tableau_RGB[2];
-                    B2 = B2 + tableau_RGB[2] * tableau_RGB[2];
-                    tmp+=1;
-                    *M0 += 1;
-                    image_pixel_gauche(img);
-                }
-                image_pixel_dessous(img);
-            }
-            for (j = 0; j < nbr_colonne; j++){ 
                 tableau_RGB[0] = image_lire_pixel(img)[0];
                 tableau_RGB[1] = image_lire_pixel(img)[1];
                 tableau_RGB[2] = image_lire_pixel(img)[2];
-                R = R + tableau_RGB[0];
-                R2 = R2 + tableau_RGB[0] * tableau_RGB[0];
-                G = G + tableau_RGB[1];
-                G2 = G2 + tableau_RGB[1] * tableau_RGB[1];
-                B = B + tableau_RGB[2];
-                B2 = B2 + tableau_RGB[2] * tableau_RGB[2];
-                tmp+=1;
+                R += tableau_RGB[0];
+                G += tableau_RGB[1];
+                B += tableau_RGB[2];
+                GR += tableau_RGB[0] * tableau_RGB[1];
+                R2 += tableau_RGB[0] * tableau_RGB[0];
+                G2 += tableau_RGB[1] * tableau_RGB[1];
+                B2 += tableau_RGB[2] * tableau_RGB[2];
+                GR2 += tableau_RGB[0] * tableau_RGB[1] * tableau_RGB[0] * tableau_RGB[1];
                 *M0 += 1;
-                image_pixel_droite(img);
-            }
-            image_pixel_dessous(img);
-            for (j = 0; j < nbr_colonne; j++){ 
-                tableau_RGB[0] = image_lire_pixel(img)[0];
-                tableau_RGB[1] = image_lire_pixel(img)[1];
-                tableau_RGB[2] = image_lire_pixel(img)[2];
-                R = R + tableau_RGB[0];
-                R2 = R2 + tableau_RGB[0] * tableau_RGB[0];
-                G = G + tableau_RGB[1];
-                G2 = G2 + tableau_RGB[1] * tableau_RGB[1];
-                B = B + tableau_RGB[2];
-                B2 = B2 + tableau_RGB[2] * tableau_RGB[2];
-                tmp+=1;
-                *M0 += 1;
-                image_pixel_gauche(img);
-            }
-        }else {
-          for (i = 0; i < nbr_ligne / 2 - 1; i++){
-                for (j = 0; j < nbr_colonne; j++){
-                    tableau_RGB[0] = image_lire_pixel(img)[0];
-                    tableau_RGB[1] = image_lire_pixel(img)[1];
-                    tableau_RGB[2] = image_lire_pixel(img)[2];
-                    R = R + tableau_RGB[0];
-                    R2 = R2 + tableau_RGB[0] * tableau_RGB[0];
-                    G = G + tableau_RGB[1];
-                    G2 = G2 + tableau_RGB[1] * tableau_RGB[1];
-                    B = B + tableau_RGB[2];
-                    B2 = B2 + tableau_RGB[2] * tableau_RGB[2];
-                    tmp += 1;
-                    *M0 += 1;
-                    image_pixel_droite(img);
-                }
-                image_pixel_dessous(img);
-
-                for (j = 0; j < nbr_colonne; j++){
-                    tableau_RGB[0] = image_lire_pixel(img)[0];
-                    tableau_RGB[1] = image_lire_pixel(img)[1];
-                    tableau_RGB[2] = image_lire_pixel(img)[2];
-                    R = R + tableau_RGB[0];
-                    R2 = R2 + tableau_RGB[0] * tableau_RGB[0];
-                    G = G + tableau_RGB[1];
-                    G2 = G2 + tableau_RGB[1] * tableau_RGB[1];
-                    B = B + tableau_RGB[2];
-                    B2 = B2 + tableau_RGB[2] * tableau_RGB[2];
-                    tmp+=1;
-                    *M0 += 1;
-                    image_pixel_gauche(img);
-                }
-                image_pixel_dessous(img);
-            }
-            for (j = 0; j < nbr_colonne; j++){ 
-                tableau_RGB[0] = image_lire_pixel(img)[0];
-                tableau_RGB[1] = image_lire_pixel(img)[1];
-                tableau_RGB[2] = image_lire_pixel(img)[2];
-                R = R +tableau_RGB[0];
-                R2 = R2 + tableau_RGB[0] * tableau_RGB[0];
-                G = G + tableau_RGB[1];
-                G2 = G2 + tableau_RGB[1] * tableau_RGB[1];
-                B = B + tableau_RGB[2];
-                B2 = B2 + tableau_RGB[2] * tableau_RGB[2];
-                tmp+=1;
-                *M0 += 1;
-                image_pixel_droite(img);
             }
         }
-      }
+
         M1[0] = R;
         M1[1] = G;
         M1[2] = B;
@@ -187,31 +95,20 @@ extern void give_moments(image img, int num_bloc, int n, int m, int* M0, double*
         M2[1] = G2;
         M2[2] = B2;
 
-    } else{ /* @TODO Gris */
-        while (tmp < nbr_pixel)
-        {
-            for (i = 0; i < nbr_ligne; i++){
-                for (j = 0; j < nbr_colonne; j++){
-                    *tableau_RGB = *image_lire_pixel(img);
-                    GR += tableau_RGB[0];
-                    GR2 += tableau_RGB[0] * tableau_RGB[0];
-                    tmp += 1;
-                    *M0 += 1;
-                    image_pixel_droite(img);
-                }
-                image_pixel_dessous(img);
+    } else {
+        for (i = 0; i < nbr_pixel_colonne; i++) {
+            for (j = 0; j < nbr_pixel_ligne; j++) {
+                COORDX(p) = pixel_start_x + j;
+                COORDY(p) = pixel_start_y + i;
+                image_move_to(img, &p);
 
-                for (j = 0; j < nbr_colonne; j++){
-                    *tableau_RGB = *image_lire_pixel(img);
-                    GR += tableau_RGB[0];
-                    GR2 += tableau_RGB[0] * tableau_RGB[0];
-                    tmp+=1;
-                    *M0 += 1;
-                    image_pixel_gauche(img);
-                }
-                image_pixel_dessous(img);
+                tableau_RGB[0] = image_lire_pixel(img)[0];
+                R += tableau_RGB[0];
+                R2 += tableau_RGB[0] * tableau_RGB[0];
+                *M0 += 1;
             }
         }
+
         M1[0] = GR;
         M2[0] = GR2;
     }

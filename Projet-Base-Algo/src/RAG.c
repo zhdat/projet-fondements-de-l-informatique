@@ -24,7 +24,6 @@ static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des 
 	r->m = malloc(r->nb_blocks * sizeof(struct moments));
 	for (i = 0; i < r->nb_blocks; i++) {
 		give_moments(r->img, i, n, m, &(r->m[i].M0), r->m[i].M1, r->m[i].M2);
-		printf("%d\n", r->m[i].M0);
 	}
 }
 
@@ -77,15 +76,15 @@ static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes d
 		for (k = 0; k < m; k++){
 			if (j < n - 1) {
 				cellule c = malloc(sizeof(struct cellule));
-				c->block = j * m + k;
-				c->next = r->neighbors[(j + 1) * m + k];
-				r->neighbors[(j + 1) * m + k] = c;
+				c->block = (j + 1) * m + k;
+				c->next = r->neighbors[j * m + k];
+				r->neighbors[j * m + k] = c;
 			}
 			if (k < m - 1) {
 				cellule c = malloc(sizeof(struct cellule));
-				c->block = j * m + k;
-				c->next = r->neighbors[j * m + k + 1];
-				r->neighbors[j * m + k + 1] = c;
+				c->block = j * m + k + 1;
+				c->next = r->neighbors[j * m + k];
+				r->neighbors[j * m + k] = c;
 			}
 		}
 	}
@@ -312,7 +311,7 @@ extern void RAG_normalize_parents(rag r){ /* effectue un parcours rétrograde du
 *  
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
-extern void RAG_give_mean_color(rag r, int indice_block, int *average_color){ /* renvoie dans le dernier paramètre la courleur moyenne du block parent du block dont l'indice est passé en second paramètre. */
+extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_color){ /* renvoie dans le dernier paramètre la courleur moyenne du block parent du block dont l'indice est passé en second paramètre. */
 	int i;
 	int indice_parent = r->father[indice_block];
 	for (i = 0; i < 3; i++) {
