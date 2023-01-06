@@ -25,7 +25,7 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     double tmp;
 
     erreur_init = r->erreur_partition;
-    erreur_seuil = erreur_init * seuil/100;
+    erreur_seuil = erreur_init * seuil/100.000;
     erreur_after_merge = erreur_init;
     tmp = RAG_give_closest_region(r, &i, &j);
 
