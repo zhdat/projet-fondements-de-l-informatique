@@ -85,15 +85,15 @@ static void init_neighbors_priv(rag r, int n, int m){ /* Initialise les listes d
 		for (k = 0; k < n; k++){
 			if (j < n - 1) {
 				cellule c = malloc(sizeof(struct cellule));
-				c->block = (j + 1) * m + k;
-				c->next = r->neighbors[j * m + k];
-				r->neighbors[j * m + k] = c;
+				c->block = (k + 1) * m + j;
+				c->next = r->neighbors[k * m + j];
+				r->neighbors[k * m + j] = c;
 			}
 			if (k < m - 1) {
 				cellule c = malloc(sizeof(struct cellule));
-				c->block = j * m + k + 1;
-				c->next = r->neighbors[j * m + k];
-				r->neighbors[j * m + k] = c;
+				c->block = k * m + j + 1;
+				c->next = r->neighbors[k * m + j];
+				r->neighbors[k * m + j] = c;
 			}
 		}
 	}
