@@ -203,6 +203,7 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 			}
 		}
 	}
+	printf("BIP\n");
 	return erreur_min;
 }
 
