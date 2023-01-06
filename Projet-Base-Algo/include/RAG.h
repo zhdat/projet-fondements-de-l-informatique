@@ -12,29 +12,14 @@
 #define RAG_H
 #include "image.h"
 
-struct moments {
-	int M0;
-	double M1[3];
-	double M2[3];
-};
-
 typedef struct moments* moments;
+
 
 typedef struct cellule* cellule;
 
-struct cellule {
-	int block;
-	cellule next;
-};
 
-struct RAG {
-	image  img;
-	int nb_blocks;
-	long double erreur_partition;
-	moments m;
-	int * father;
-	cellule *neighbors;
-};
+
+
 
 typedef struct RAG * rag;
 
@@ -60,6 +45,16 @@ extern rag create_RAG(image img, int n, int m);
 */
 extern void free_RAG(rag r);
 
+
+/**
+* Permet de récupérer l'erreur.
+*
+* @param r structure RAG.
+* @param i indice de block.
+* @param j indice de block.
+*
+*/
+double get_erreur(rag r, int i, int j);
 
 /**  
 * Cherche deux indices de blocks induisant la plus petite augmentation d'erreur quadratique.  

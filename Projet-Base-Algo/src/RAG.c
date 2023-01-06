@@ -14,6 +14,28 @@
 #include "moment.h"
 #include "image.h"
 
+struct moments {
+    int M0;
+    double M1[3];
+    double M2[3];
+};
+
+
+struct cellule {
+    int block;
+    cellule next;
+};
+
+
+struct RAG {
+    image  img;
+    int nb_blocks;
+    long double erreur_partition;
+    moments m;
+    int * father;
+    cellule *neighbors;
+};
+
 /**  
 * Permet d'initialiser les moments de la structure RAG.  
 *  
@@ -22,7 +44,7 @@
 * @param m nombre de blocks par colonne.
 *   
 */
-static void init_moments_priv(rag r,int n,int m){ /* Initialise les moments des blocks à l'aide de give_moments() */
+static void init_moments_priv(rag r,int n,int m){
 	int i;
 	r->m = malloc(r->nb_blocks * sizeof(struct moments));
 	for (i = 0; i < r->nb_blocks; i++) {
@@ -137,12 +159,6 @@ static void init_partition_error_priv(rag r){ /* initialise l'erreur de partitio
 	}
 }
 
-
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
-*/
 extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une image et de la taille des blocks. */
 	rag r = malloc(sizeof(struct RAG));
 	r->img = img;
@@ -157,12 +173,6 @@ extern rag create_RAG(image img, int n, int m){ /* Crée un RAG à partir d'une 
 	return r;
 }
 
-
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
-*/
 extern void free_RAG(rag r){
 	free_father_priv(r);
 	free_neighbors_priv(r);
@@ -209,11 +219,6 @@ double get_erreur(rag r, int i, int j) {
 
 }
 
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
-*/
 extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_block){ /* renvoie les deux indices de blocks dont la fusion induit la plus petite augmentation d'erreur quadratique. Seuls les blocks vérifiant father[i]==i seront pris en compte dans le calcul. Cette fonction renvoie la valeur de cette augmentation. */
 	int i;
 	int j;
@@ -247,12 +252,15 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 }
 
 
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+/**
+* Permet de mettre à jour les moments de la région fusionnée.
+*
+* @param r structure RAG.
+* @param region1 indice de block.
+* @param region2 indice de block.
+*
 */
-static void update_moments_priv(rag r, int region1, int region2){ /* Met à jour les moments de la région fusionnée. */
+static void update_moments_priv(rag r, int region1, int region2){
 	int i;
 	r->m[region2].M0 = r->m[region1].M0 + r->m[region2].M0;
 	if (r->m[region1].M1[1] == -1) {
@@ -267,12 +275,15 @@ static void update_moments_priv(rag r, int region1, int region2){ /* Met à jour
 }
 
 
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
+/**
+* Permet de mettre à jour les listes des voisins des deux régions fusionnées.
+*
+* @param r structure RAG.
+* @param region1 indice de block.
+* @param region2 indice de block.
+*
 */
-static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jour les listes de voisins des deux régions fusionnées. */
+static void update_neighbors_priv(rag r, int region1, int region2){
 	cellule c;
 	for (c = r->neighbors[region1]; c != NULL; c = c->next) {
 		if (c->block != region2) {
@@ -284,13 +295,7 @@ static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jo
 	}
 }
 
-
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
-*/
-void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régions en mettant à jour : le tableau father, les moments, les voisins et l'erreur de partition. */
+void RAG_merge_regions(rag r, int region1, int region2){
 	double mu_B[3];
 	double mu_Bp[3];
 	double diff_mu[3];
@@ -336,12 +341,6 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 	
 }
 
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
-*/
-/* @TODO placer cette fonction*/
 extern void RAG_normalize_parents(rag r){ /* effectue un parcours rétrograde du tableau father en remplçant pour chaque indice i, father[i] par father[father[i]]. */
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
@@ -349,11 +348,6 @@ extern void RAG_normalize_parents(rag r){ /* effectue un parcours rétrograde du
 	}
 }
 
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
-*/
 extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_color){ /* renvoie dans le dernier paramètre la courleur moyenne du block parent du block dont l'indice est passé en second paramètre. */
 	int i;
 	int indice_parent = r->father[indice_block];

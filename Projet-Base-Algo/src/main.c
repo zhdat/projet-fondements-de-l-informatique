@@ -18,13 +18,13 @@
     *
     
 
-* @todo the list of improvements suggested * @bug the list of known bugs.  
+* @todo Une meilleur gestion des images en niveau de gris * @bug Image au format ".pgm".
 */
 
 /**  
 * @file main.c  
 *  
-* Description of the program objectives. * All necessary references.  
+* Le but de ce programme est de ségmenter une image en différents blocks.
 */
 
 #include <string.h>
@@ -36,12 +36,6 @@
 #include "image.h"
 #include "fusion_iterative.h"
 
-
-/**  
-* A complete description of the function.  
-*  
-* @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
-*/
 int main(int argc, char *argv[]) {
    #define USAGE "Usage : %s text_file\n"
    image img;
