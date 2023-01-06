@@ -129,9 +129,9 @@ static void free_neighbors_priv(rag r){
 static void init_partition_error_priv(rag r){
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
-		if (r->m[i].M1[1] == -1){
+		if (r->m[i].M1[1] == -1){ /* Image en nuances de gris. */
 			r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0);
-		}else {
+		}else { /* Image en couleur. */
 			r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
 		}
 	}
