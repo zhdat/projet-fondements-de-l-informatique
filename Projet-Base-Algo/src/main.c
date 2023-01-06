@@ -41,7 +41,7 @@
 *  
 * @param par1 description of the parameter par1. * @param par2 description of the parameter par2. * @return description of the result.  
 */
-int main(int argc, char *argv[]) { /* @TODO verification */
+int main(int argc, char *argv[]) {
    #define USAGE "Usage : %s text_file\n"
 
    if ((argc > 1) && (!strcasecmp("-h", argv[1]))) {
