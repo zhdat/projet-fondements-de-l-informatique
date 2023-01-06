@@ -277,6 +277,8 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 	norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
 
 	r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * norme_2;
+
+	printf("erreur partition : %Lf", r->erreur_partition);
 }
 
 /**  
