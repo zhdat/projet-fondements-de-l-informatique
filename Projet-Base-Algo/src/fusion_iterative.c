@@ -51,8 +51,6 @@ image create_output_image(rag r){ /* crée une image où chaque block est affich
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
     int mean_color[3];
-    cellule c;
-    c->next = r->
     image_initialize(img_out, dim, L, H);
     for (i = 0; i < H; i++)
     {

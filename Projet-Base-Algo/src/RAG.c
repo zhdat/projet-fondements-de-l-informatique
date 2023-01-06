@@ -178,7 +178,7 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	for (i = 0; i < r->nb_blocks; i++) { /* @TODO (voisins) */
 		if (r->father[i] == i) {
 			for (j = i + 1; j < r->nb_blocks; j++) {
-				if (r->father[j] == j) {
+				if (r->father[j] == j && (j == r->neighbors[i] || j == r->neighbors[i]->next)) {
 
 					mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
 					mu_B[1] = r->m[i].M1[1] / r->m[i].M0;
