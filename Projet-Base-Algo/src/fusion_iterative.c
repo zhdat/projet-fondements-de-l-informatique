@@ -37,6 +37,7 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
         RAG_merge_regions(r, i, j);
         erreur_after_merge += RAG_give_closest_region(r, &i, &j);
         tmp = RAG_give_closest_region(r, &i, &j);
+        RAG_normalize_parents(r);
     }
 }
 
@@ -50,17 +51,19 @@ image create_output_image(rag r){ /* crée une image où chaque block est affich
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
     int mean_color[3];
-    int n_block;
+    cellule c;
+    c->next = r->
     image_initialize(img_out, dim, L, H);
     for (i = 0; i < H; i++)
     {
         for (j = 0; j < L; j++)
         {
-            n_block = (i*L) + j;
-            RAG_give_mean_color(r, n_block, mean_color);
+            RAG_give_mean_color(r, indice_block, mean_color);
             image_write_pixel(img_out, i, j, (unsigned char *) mean_color);
         }
     }
+
+
     return img_out;
     
 }
