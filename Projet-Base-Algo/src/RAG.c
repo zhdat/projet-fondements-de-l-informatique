@@ -274,14 +274,12 @@ static void update_moments_priv(rag r, int region1, int region2){ /* Met à jour
 */
 static void update_neighbors_priv(rag r, int region1, int region2){ /* Met à jour les listes de voisins des deux régions fusionnées. */
 	cellule c;
-	printf(" region 1 : %d", region1);
 	for (c = r->neighbors[region1]; c != NULL; c = c->next) {
 		if (c->block != region2) {
 			cellule c2 = malloc(sizeof(struct cellule));
 			c2->block = c->block;
 			c2->next = r->neighbors[region2];
 			r->neighbors[region2] = c2;
-			printf(" c block : %d", c->block);
 		}
 	}
 }
