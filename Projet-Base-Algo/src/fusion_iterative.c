@@ -27,11 +27,11 @@ void perform_merge(rag r, double seuil){ /* effectue itérativement des fusions 
     erreur_seuil = erreur_init * seuil/100;
     erreur_after_merge = erreur_init;
 
-    erreur_after_merge = RAG_give_closest_region(r, &i, &j);
+    erreur_after_merge += RAG_give_closest_region(r, &i, &j);
     while (erreur_after_merge < erreur_seuil)
     {
         RAG_merge_regions(r, i, j);
-        erreur_after_merge = RAG_give_closest_region(r, &i, &j);
+        erreur_after_merge += RAG_give_closest_region(r, &i, &j);
     }
 }
 
