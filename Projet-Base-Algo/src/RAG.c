@@ -118,7 +118,11 @@ static void free_neighbors_priv(rag r){
 static void init_partition_error_priv(rag r){ /* initialise l'erreur de partition. L'erreur de partition est définie par la somme des erreur quadratiques des blocks. */
 	int i;
 	for (i = 0; i < r->nb_blocks; i++) {
-		r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
+		if (r->m[i].M1[1] == NULL){
+			r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0);
+		}else {
+			r->erreur_partition += (r->m[i].M2[0] - (r->m[i].M1[0] * r->m[i].M1[0]) / r->m[i].M0) + (r->m[i].M2[1] - (r->m[i].M1[1] * r->m[i].M1[1]) / r->m[i].M0) + (r->m[i].M2[2] - (r->m[i].M1[2] * r->m[i].M1[2]) / r->m[i].M0);
+		}
 	}
 }
 
@@ -162,21 +166,36 @@ double get_erreur(rag r, int i, int j) {
     double norme_2;
     double erreur;
 
-    mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
-    mu_B[1] = r->m[i].M1[1] / r->m[i].M0;
-    mu_B[2] = r->m[i].M1[2] / r->m[i].M0;
-    mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
-    mu_Bp[1] = r->m[j].M1[1] / r->m[j].M0;
-    mu_Bp[2] = r->m[j].M1[2] / r->m[j].M0;
+    if (r->m[i].M1[1] == NULL){
+    	mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
+		mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
 
-    diff_mu[0] = mu_B[0] - mu_Bp[0];
-    diff_mu[1] = mu_B[1] - mu_Bp[1];
-    diff_mu[2] = mu_B[2] - mu_Bp[2];
+		diff_mu[0] = mu_B[0] - mu_Bp[0];
 
-    norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
+		norme_2 = diff_mu[0] * diff_mu[0];
 
-    erreur = ((r->m[i].M0 * r->m[j].M0) / (r->m[i].M0 + r->m[j].M0)) * norme_2;
-    return erreur;
+		erreur = ((r->m[i].M0 * r->m[j].M0) / (r->m[i].M0 + r->m[j].M0)) * norme_2;
+
+		return erreur;
+
+    } else {
+    	mu_B[0] = r->m[i].M1[0] / r->m[i].M0;
+	    mu_B[1] = r->m[i].M1[1] / r->m[i].M0;
+	    mu_B[2] = r->m[i].M1[2] / r->m[i].M0;
+	    mu_Bp[0] = r->m[j].M1[0] / r->m[j].M0;
+	    mu_Bp[1] = r->m[j].M1[1] / r->m[j].M0;
+	    mu_Bp[2] = r->m[j].M1[2] / r->m[j].M0;
+
+	    diff_mu[0] = mu_B[0] - mu_Bp[0];
+	    diff_mu[1] = mu_B[1] - mu_Bp[1];
+	    diff_mu[2] = mu_B[2] - mu_Bp[2];
+
+	    norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
+
+	    erreur = ((r->m[i].M0 * r->m[j].M0) / (r->m[i].M0 + r->m[j].M0)) * norme_2;
+	    return erreur;
+    }
+
 }
 
 /**  
@@ -225,9 +244,14 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 static void update_moments_priv(rag r, int region1, int region2){ /* Met à jour les moments de la région fusionnée. */
 	int i;
 	r->m[region2].M0 = r->m[region1].M0 + r->m[region2].M0;
-	for (i = 0; i < 3; i++) {
-		r->m[region2].M1[i] = r->m[region1].M1[i] + r->m[region2].M1[i];
-		r->m[region2].M2[i] = r->m[region1].M2[i] + r->m[region2].M2[i];
+	if (r->m[region1].M1[1] == NULL) {
+		r->m[region2].M1[0] = r->m[region1].M1[0] + r->m[region2].M1[0];
+		r->m[region2].M2[0] = r->m[region1].M2[0] + r->m[region2].M2[0];
+	} else {
+		for (i = 0; i < 3; i++) {
+			r->m[region2].M1[i] = r->m[region1].M1[i] + r->m[region2].M1[i];
+			r->m[region2].M2[i] = r->m[region1].M2[i] + r->m[region2].M2[i];
+		}
 	}
 }
 
@@ -272,20 +296,33 @@ void RAG_merge_regions(rag r, int region1, int region2){ /* Fusionne les 2 régi
 	update_neighbors_priv(r, region1, region2);
 
 	/* Mise à jour de l'erreur de partition */
-	mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
-	mu_B[1] = r->m[region1].M1[1] / r->m[region1].M0;
-	mu_B[2] = r->m[region1].M1[2] / r->m[region1].M0;
-	mu_Bp[0] = r->m[region2].M1[0] / r->m[region2].M0;
-	mu_Bp[1] = r->m[region2].M1[1] / r->m[region2].M0;
-	mu_Bp[2] = r->m[region2].M1[2] / r->m[region2].M0;
+	if (r->m[region1].M1[1] == NULL){
+		mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
+		mu_Bp[0] = r->m[region2].M1[0] / r->m[region2].M0;
 
-	diff_mu[0] = mu_B[0] - mu_Bp[0];
-	diff_mu[1] = mu_B[1] - mu_Bp[1];
-	diff_mu[2] = mu_B[2] - mu_Bp[2];
+		diff_mu[0] = mu_B[0] - mu_Bp[0];
 
-	norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
+		norme_2 = diff_mu[0] * diff_mu[0];
 
-	r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * norme_2;
+		r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * norme_2;
+
+	} else {
+		mu_B[0] = r->m[region1].M1[0] / r->m[region1].M0;
+		mu_B[1] = r->m[region1].M1[1] / r->m[region1].M0;
+		mu_B[2] = r->m[region1].M1[2] / r->m[region1].M0;
+		mu_Bp[0] = r->m[region2].M1[0] / r->m[region2].M0;
+		mu_Bp[1] = r->m[region2].M1[1] / r->m[region2].M0;
+		mu_Bp[2] = r->m[region2].M1[2] / r->m[region2].M0;
+
+		diff_mu[0] = mu_B[0] - mu_Bp[0];
+		diff_mu[1] = mu_B[1] - mu_Bp[1];
+		diff_mu[2] = mu_B[2] - mu_Bp[2];
+
+		norme_2 = diff_mu[0] * diff_mu[0] + diff_mu[1] * diff_mu[1] + diff_mu[2] * diff_mu[2];
+
+		r->erreur_partition = ((r->m[region1].M0 * r->m[region2].M0) / (r->m[region1].M0 + r->m[region2].M0)) * norme_2;
+	}
+	
 }
 
 /**  
@@ -309,7 +346,13 @@ extern void RAG_normalize_parents(rag r){ /* effectue un parcours rétrograde du
 extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_color){ /* renvoie dans le dernier paramètre la courleur moyenne du block parent du block dont l'indice est passé en second paramètre. */
 	int i;
 	int indice_parent = r->father[indice_block];
-	for (i = 0; i < 3; i++) {
-		average_color[i] = r->m[indice_parent].M1[i] / r->m[indice_parent].M0;
+
+	if (r->m[indice_parent].M1[1] == NULL){
+		average_color[0] = r->m[indice_parent].M1[0] / r->m[indice_parent].M0;
+	} else {
+		for (i = 0; i < 3; i++) {
+		 average_color[i] = r->m[indice_parent].M1[i] / r->m[indice_parent].M0;
+		}
 	}
+
 }
