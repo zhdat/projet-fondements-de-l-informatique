@@ -28,6 +28,7 @@
 */
 
 #include <string.h>
+#include <strings.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "RAG.h"
@@ -43,18 +44,17 @@
 */
 int main(int argc, char *argv[]) {
    #define USAGE "Usage : %s text_file\n"
-
-   if ((argc > 1) && (!strcasecmp("-h", argv[1]))) {
-      fprintf(stderr, USAGE, argv[0]);
-      return EXIT_FAILURE;
-   }   
-   
    image img;
    rag r;
    int n;
    int m;
    double seuil;
    image img_out;
+
+   if ((argc > 1) && (!strcasecmp("-h", argv[1]))) {
+      fprintf(stderr, USAGE, argv[0]);
+      return EXIT_FAILURE;
+   }   
 
    if (argc != 5)
    {

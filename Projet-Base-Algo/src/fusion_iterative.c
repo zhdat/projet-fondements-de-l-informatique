@@ -48,13 +48,13 @@ image create_output_image(rag r, int n, int m){ /* crée une image où chaque bl
     int nbr_pixel_colonne;
     int nbr_pixel_ligne;
     int c;
-    image img = r->img;
-    image img_out;
-    img_out = FAIRE_image();
     int dim = image_give_dim(img);
     int L = image_give_largeur(img);
     int H = image_give_hauteur(img);
     unsigned char mean_color[3];
+    image img = r->img;
+    image img_out;
+    img_out = FAIRE_image();
     nbr_pixel_colonne = H / m;
     nbr_pixel_ligne = L / n;
     image_initialize(img_out, dim, L, H);
