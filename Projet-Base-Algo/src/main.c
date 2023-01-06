@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
       return 1;
    }
 
-   if (atof(argv[5]) <= 0 || atof(argv[5]) > 10) {
+   if (atof(argv[4]) <= 0 || atof(argv[4]) > 10) {
       printf("Erreur : seuil incorrect.\n");
       return 1;
    }
