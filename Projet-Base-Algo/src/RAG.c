@@ -212,7 +212,7 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
             while (c != NULL) {
                 j = c->block;
                 while (r->father[j] != j) {
-                    j = r->father[j];
+                    j = r->neighbors[j];
                 }
                 if (i != j) {
                     erreur = get_erreur(r, i, j);
