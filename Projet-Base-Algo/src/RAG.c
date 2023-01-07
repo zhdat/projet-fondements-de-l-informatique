@@ -210,7 +210,7 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 		if (r->father[i] == i) {
             cellule c = r->neighbors[i];
             while (c != NULL) {
-                j = c->block;
+                j = r->father[c->block];
                 /*while (r->father[j] != j) {
                     j = r->father[j];
                 }*/
