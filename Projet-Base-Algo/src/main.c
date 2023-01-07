@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
    if ((argc > 1) && (!strcasecmp("-h", argv[1]))) {
       fprintf(stderr, USAGE, argv[0]);
       return EXIT_FAILURE;
-   }   
+   }
 
    if (argc != 5) {
       printf("Erreur : nombre d'arguments incorrect.\n");
@@ -72,12 +72,9 @@ int main(int argc, char *argv[]) {
    seuil = atof(argv[4]);
    r = create_RAG(img, n, m);
    perform_merge(r, seuil);
-/*   if ((atoi(argv[2]) % image_give_largeur(img) != 0) || (atoi(argv[3]) % image_give_hauteur(img) != 0)) {
-       printf("Erreur : nombre de blocks incorrect (non multiple de la taille de l'image).\n");
-       return 1;
-   }*/
    img_out = create_output_image(r, atoi(argv[2]), atoi(argv[3]));
-   image_sauvegarder(img_out, "output.pgm");
+   image_sauvegarder(img_out, "output.ppm");
    free_RAG(r);
+   printf("Success\n");
    return EXIT_SUCCESS;
 }
