@@ -8,6 +8,11 @@
  * or revised without written permission of the authors.
  */
 
+/**
+* @file moment.c
+*
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "image.h"

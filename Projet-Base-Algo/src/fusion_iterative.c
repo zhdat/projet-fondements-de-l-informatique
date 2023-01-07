@@ -6,7 +6,12 @@
  * This file is owned by ENSICAEN students.
  * No portion of this document may be reproduced, copied
  * or revised without written permission of the authors.
- */ 
+ */
+
+/**
+* @file fusion_iterative.c
+*
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +32,7 @@ void perform_merge(rag r, double seuil) {
     erreur_init = r->erreur_partition;
     erreur_seuil = erreur_init * seuil;
     erreur_after_merge = erreur_init;
-    tmp = RAG_give_closest_region(r, &i, &j);
+    tmp = RAG_give_closest_region(r, &i, &j); /* Création d'une variable afin de pouvoir détecter quand toutes les fusions possibles ont été testée */
 
     while (erreur_after_merge < erreur_seuil && tmp != -1) {
         RAG_merge_regions(r, i, j);

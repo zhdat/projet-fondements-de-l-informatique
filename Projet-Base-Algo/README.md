@@ -14,6 +14,6 @@ https://www.ecole.ensicaen.fr/~ravix/images_projet/
 RAVIX Calliste : calliste.ravix@ecole.ensicaen.fr
 MICHEL Maxime : maxime.michel@ecole.ensicaen.fr
 
-## Feuille de routeo
+## Feuille de route
 Nous pouvons encore améliorer l'interface de notre programme afin de proposer aux utilisateurs un menu dans lequel ils pourront choisir les différents paramètres nécessaires au programme.
 

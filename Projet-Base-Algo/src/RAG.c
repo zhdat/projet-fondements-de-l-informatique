@@ -8,6 +8,11 @@
  * or revised without written permission of the authors.
  */
 
+/**
+* @file RAG.c
+*
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "RAG.h"

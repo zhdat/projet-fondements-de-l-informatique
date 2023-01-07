@@ -1,9 +1,10 @@
 var indexSectionsWithContent =
 {
-  0: "bimt",
-  1: "i",
-  2: "m",
-  3: "bt"
+  0: "cfgimprt",
+  1: "cimpr",
+  2: "fmr",
+  3: "cfgpr",
+  4: "t"
 };
 
 var indexSectionNames =
@@ -11,7 +12,8 @@ var indexSectionNames =
   0: "all",
   1: "classes",
   2: "files",
-  3: "pages"
+  3: "functions",
+  4: "pages"
 };
 
 var indexSectionLabels =
@@ -19,6 +21,7 @@ var indexSectionLabels =
   0: "All",
   1: "Classes",
   2: "Files",
-  3: "Pages"
+  3: "Functions",
+  4: "Pages"
 };
 
