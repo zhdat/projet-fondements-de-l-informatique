@@ -265,12 +265,13 @@ static void update_neighbors_priv(rag r, int region1, int region2){
 	cellule c;
 	for (c = r->neighbors[region1]; c != NULL; c = c->next) {
 		if (c->block != region2) {
-			cellule c2 = malloc(sizeof(struct cellule));
-			c2->block = c->block;
-			c2->next = r->neighbors[region2];
-			r->neighbors[region2] = c2;
-		}
+            cellule c2 = malloc(sizeof(struct cellule));
+            c2->block = c->block;
+            c2->next = r->neighbors[region2];
+            r->neighbors[region2] = c2;
+        }
 	}
+    r->neighbors[region1] = NULL;
 }
 
 void RAG_merge_regions(rag r, int region1, int region2){
