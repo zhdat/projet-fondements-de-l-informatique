@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
       return EXIT_FAILURE;
    }
 
-   if (argc != 5) {
+   if (argc != 6) {
       printf("Erreur : nombre d'arguments incorrect.\n");
       return 1;
    }
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
    r = create_RAG(img, n, m);
    perform_merge(r, seuil);
    img_out = create_output_image(r, atoi(argv[2]), atoi(argv[3]));
-   image_sauvegarder(img_out, "output.ppm");
+   image_sauvegarder(img_out, argv[5]);
    free_RAG(r);
    printf("Success\n");
    return EXIT_SUCCESS;
