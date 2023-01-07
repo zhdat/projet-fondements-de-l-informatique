@@ -209,17 +209,17 @@ extern double RAG_give_closest_region(rag r, int *indice1_block, int *indice2_bl
 	for (i = 0; i < r->nb_blocks; i++) {
 		if (r->father[i] == i) {
             cellule c = r->neighbors[i];
-            while (c != NULL) {
+            while (c != NULL) { /* Parcours des voisins de la cellule i. */
                 j = c->block;
                 while (r->father[j] != j) {
                     j = r->father[j];
                 }
                 if (i != j) {
-                    erreur = get_erreur(r, i, j);
+                    erreur = get_erreur(r, i, j); /* Calcul de l'erreur entre les deux cellules. */
                     if (erreur_min == -1 || erreur < erreur_min) {
                         erreur_min = erreur;
-                        *indice1_block = i;
-                        *indice2_block = j;
+                        *indice1_block = i; /* Récupération de l'indice 1 du bloc */
+                        *indice2_block = j; /* Récupération de l'indice 2 du bloc */
                     }
                 }
                 c = c->next;

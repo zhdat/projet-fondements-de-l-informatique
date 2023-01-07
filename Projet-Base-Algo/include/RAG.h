@@ -113,7 +113,7 @@ extern void RAG_normalize_parents(rag r);
 *  
 * @param r structure RAG.
 * @param indice_block indice de block.
-* @param average_color .
+* @param average_color couleur moyenne.
 * 
 */
 extern void RAG_give_mean_color(rag r, int indice_block, unsigned char *average_color);

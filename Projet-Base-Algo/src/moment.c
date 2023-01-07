@@ -84,12 +84,12 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
             }
         }
 
-        M1[0] = R;
-        M1[1] = G;
-        M1[2] = B;
-        M2[0] = R2;
-        M2[1] = G2;
-        M2[2] = B2;
+        M1[0] = R; /* M1[0] = somme des composantes Rouge du bloc */
+        M1[1] = G; /* M1[1] = somme des composantes Verte du bloc */
+        M1[2] = B; /* M1[2] = somme des composantes Bleue du bloc */
+        M2[0] = R2; /* M2[0] = somme des carrés des composantes Rouge du bloc */
+        M2[1] = G2; /* M2[1] = somme des carrés des composantes Verte du bloc */
+        M2[2] = B2; /* M2[2] = somme des carrés des composantes Bleue du bloc */
 
     } else { /* Calcul des moments (image nuances de gris) */
         for (i = 0; i < nbr_pixel_colonne; i++) {
@@ -104,10 +104,10 @@ extern void give_moments(image img, int num_bloc, int n, int m, int *M0, double 
             }
         }
 
-        M1[0] = GR;
+        M1[0] = GR; /* M1[0] = somme des composantes Grise du bloc */
         M1[1] = -1;
         M1[2] = -1;
-        M2[0] = GR2;
+        M2[0] = GR2; /* M2[0] = somme des carrés des composantes Grise du bloc */
         M2[1] = -1;
         M2[2] = -1;
     }

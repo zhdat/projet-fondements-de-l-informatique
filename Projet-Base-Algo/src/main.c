@@ -25,7 +25,8 @@
 /**  
 * @file main.c  
 *  
-* Le but de ce programme est de ségmenter une image en différents blocks.
+* Le but de ce programme est diviser une image en régions homogènes
+* qui correspondent à des objets ou parties d'objets présents dans l'objet.
 */
 
 #include <string.h>
