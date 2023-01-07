@@ -18,7 +18,8 @@
     *
     
 
-* @todo Résoudre fusions verticale. * @bug Fusions uniquement horizontale.
+* @todo Améliorer l'interface du programme.
+*
 */
 
 /**  

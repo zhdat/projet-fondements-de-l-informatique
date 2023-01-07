@@ -9,12 +9,13 @@ How to install this program
      make
 
 4. Type the following command to run the program :
-    ./bin/prog <file_name> <number_of_blocks_in_line> <number_of_blocks_in_columns> <threshold>
+    ./bin/prog <file_name> <number_of_blocks_in_line> <number_of_blocks_in_columns> <threshold> <file_name>
 
     where <file_name> is the name of the file you want to read.
     <number_of_blocks_in_line> is the number of blocks in a line.
     <number_of_blocks_in_columns> is the number of blocks in a column.
     <threshold> is the threshold of the program.
+    <file_name> is the name of the file you want to save.
 
     Example : ./bin/prog image.ppm 64 64 2.
 
